@@ -60,7 +60,6 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Views\" />
-    <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Teams.sql" />
@@ -69,8 +68,6 @@
     <Build Include="dbo\Tables\Players.sql" />
     <Build Include="dbo\Views\Results_V.sql" />
     <Build Include="dbo\Views\Leaderboard_V.sql" />
-    <Build Include="Security\LeagueManagerApi.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SqlSchemaCompare.scmp" />
