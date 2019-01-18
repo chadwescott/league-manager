@@ -1,8 +1,8 @@
 ﻿CREATE VIEW dbo.Results_V
 AS
-SELECT        dbo.Sessions.DayOfWeek, dbo.Sessions.StartTime, dbo.Teams.TeamNumber, dbo.Teams.Wins, dbo.Teams.Losses, dbo.Players.FirstName, dbo.Players.LastName, dbo.Players.Nickname
-FROM            dbo.Sessions INNER JOIN
-                         dbo.Teams ON dbo.Sessions.Id = dbo.Teams.SessionId INNER JOIN
+SELECT        dbo.Events.[Name], dbo.Events.StartTime, dbo.Teams.TeamNumber, dbo.Teams.Wins, dbo.Teams.Losses, dbo.Players.FirstName, dbo.Players.LastName, dbo.Players.Nickname
+FROM            dbo.Events INNER JOIN
+                         dbo.Teams ON dbo.Events.Id = dbo.Teams.EventId INNER JOIN
                          dbo.TeamPlayers ON dbo.Teams.Id = dbo.TeamPlayers.TeamId INNER JOIN
                          dbo.Players ON dbo.TeamPlayers.PlayerId = dbo.Players.Id
 GO
@@ -88,7 +88,7 @@ Begin DesignProperties =
          Left = 0
       End
       Begin Tables = 
-         Begin Table = "Sessions"
+         Begin Table = "Events"
             Begin Extent = 
                Top = 182
                Left = 331
@@ -162,5 +162,6 @@ Begin DesignProperties =
          Or = 1350
          Or = 1350
          Or = 1350
-      End', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'Results_V';
+      End
+', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'Results_V';
 

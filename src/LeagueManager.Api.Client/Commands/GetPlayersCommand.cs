@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 
-using LeagueManager.Api.Models.Responses;
+using LeagueManager.Domain.Responses;
 
 namespace LeagueManager.Api.Client.Commands
 {

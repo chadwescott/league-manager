@@ -3,8 +3,8 @@ CREATE VIEW [dbo].[Leaderboard_V]
 AS
 SELECT        TOP (100) PERCENT dbo.Players.FirstName, dbo.Players.LastName, dbo.Players.Nickname, SUM(dbo.Teams.Wins) + SUM(dbo.Teams.Losses) AS GamesPlayed, SUM(dbo.Teams.Wins) AS Wins, SUM(dbo.Teams.Losses) AS Losses, (SUM(dbo.Teams.Wins) * 1.0) / (SUM(dbo.Teams.Wins) 
                          + SUM(dbo.Teams.Losses)) * 100 AS WinPct
-FROM            dbo.Sessions INNER JOIN
-                         dbo.Teams ON dbo.Sessions.Id = dbo.Teams.SessionId INNER JOIN
+FROM            dbo.Events INNER JOIN
+                         dbo.Teams ON dbo.Events.Id = dbo.Teams.EventId INNER JOIN
                          dbo.TeamPlayers ON dbo.Teams.Id = dbo.TeamPlayers.TeamId INNER JOIN
                          dbo.Players ON dbo.TeamPlayers.PlayerId = dbo.Players.Id
 GROUP BY dbo.Players.FirstName, dbo.Players.LastName, dbo.Players.Nickname
@@ -84,7 +84,7 @@ Begin DesignProperties =
          Left = 0
       End
       Begin Tables = 
-         Begin Table = "Sessions"
+         Begin Table = "Events"
             Begin Extent = 
                Top = 6
                Left = 38

@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 
-using LeagueManager.Api.Models.Responses;
+using LeagueManager.Api.Mappers.Responses;
 using LeagueManager.Business.Commands;
+using LeagueManager.Domain.Responses;
 
 using Microsoft.AspNetCore.Mvc;
 
