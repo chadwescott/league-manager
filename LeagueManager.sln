@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeagueManager.Database", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeagueManager.Business", "src\LeagueManager.Business\LeagueManager.Business.csproj", "{EF3DBC51-CA03-4B66-B10E-8545EFB6B740}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeagueManager.DataAccess", "src\LeagueManager.DataAccess\LeagueManager.DataAccess.csproj", "{DB36F3F4-322F-40F3-A0BD-9AB63549922A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeagueManager.DataAccess", "src\LeagueManager.DataAccess\LeagueManager.DataAccess.csproj", "{DB36F3F4-322F-40F3-A0BD-9AB63549922A}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "LeagueManager.DatabaseSchema", "src\LeagueManager.DatabaseSchema\LeagueManager.DatabaseSchema.sqlproj", "{864002EF-F402-4F35-9699-20A171A351B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,12 @@ Global
 		{DB36F3F4-322F-40F3-A0BD-9AB63549922A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB36F3F4-322F-40F3-A0BD-9AB63549922A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB36F3F4-322F-40F3-A0BD-9AB63549922A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{864002EF-F402-4F35-9699-20A171A351B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{864002EF-F402-4F35-9699-20A171A351B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{864002EF-F402-4F35-9699-20A171A351B1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{864002EF-F402-4F35-9699-20A171A351B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{864002EF-F402-4F35-9699-20A171A351B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{864002EF-F402-4F35-9699-20A171A351B1}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +75,7 @@ Global
 		{ACE16F72-EEB2-400A-86B6-55D4D02C0988} = {969F86E1-8452-48E7-8C35-A4CCD6006D2F}
 		{EF3DBC51-CA03-4B66-B10E-8545EFB6B740} = {969F86E1-8452-48E7-8C35-A4CCD6006D2F}
 		{DB36F3F4-322F-40F3-A0BD-9AB63549922A} = {969F86E1-8452-48E7-8C35-A4CCD6006D2F}
+		{864002EF-F402-4F35-9699-20A171A351B1} = {969F86E1-8452-48E7-8C35-A4CCD6006D2F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {95F1D40D-19CA-4F03-AF34-CD48395E4F7F}
