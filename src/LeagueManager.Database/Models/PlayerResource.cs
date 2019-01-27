@@ -2,10 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using LeagueManager.DataAccess;
+
 namespace LeagueManager.Database.Models
 {
     [Table("Players")]
-    public class PlayerResource
+    public class PlayerResource : IHasId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

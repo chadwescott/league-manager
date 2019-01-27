@@ -19,5 +19,8 @@ namespace LeagueManager.Domain.Responses
 
         [JsonProperty("email")]
         public string Email { get; set; }
+
+        [JsonProperty("links")]
+        public LinkResponse[] Links { get; set; }
     }
 }

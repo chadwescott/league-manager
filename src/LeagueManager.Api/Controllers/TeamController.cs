@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LeagueManager.Api.Controllers
 {
     [ApiController]
-    [Route("/api/teams")]
+    [Route("/api/" + Routes.Players)]
     public class TeamController : BaseController
     {
         //private readonly IGetAllTeams _getAllTeams;
@@ -20,7 +20,7 @@ namespace LeagueManager.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("/api/events/{eventId}/teams")]
+        [Route("/api/" + Routes.Events + "/{eventId}/" + Routes.Teams)]
         [ProducesResponseType(200, Type = typeof(TeamResponse[]))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

@@ -1,4 +1,5 @@
 ﻿using LeagueManager.Business.Models;
+using LeagueManager.Domain;
 using LeagueManager.Domain.Responses;
 
 namespace LeagueManager.Api.Mappers.Responses
@@ -13,7 +14,17 @@ namespace LeagueManager.Api.Mappers.Responses
                 FirstName = player.FirstName,
                 LastName = player.LastName,
                 NickName = player.NickName,
-                Email = player.Email
+                Email = player.Email,
+                Links = new LinkResponse[]
+                {
+                    new LinkResponse
+                    {
+                        Href = $"/{Routes.Players}/{player.Id}/{Routes.Leagues}",
+                        MediaType = MediaTypes.Json,
+                        Method = Methods.GET,
+                        Rel = LinkTypes.LEAGUES 
+                    }
+                }
             };
         }
     }

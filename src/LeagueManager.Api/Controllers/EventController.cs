@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LeagueManager.Api.Controllers
 {
     [ApiController]
-    [Route("/api/events")]
+    [Route("/api/" + Routes.Events)]
     public class EventController : BaseController
     {
         //private readonly IGetAllEvents _getAllEvents;

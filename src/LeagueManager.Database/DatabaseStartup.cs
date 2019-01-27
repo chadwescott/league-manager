@@ -18,6 +18,7 @@ namespace LeagueManager.Database
             services.AddSingleton<IContextFactory<IDbContext>>(x => new ContextFactory<ILeagueManagerContext>(settings.ConnectionString, -1));
 
             services.AddTransient<IGetAllPlayersSqlCommand, GetAllPlayersSqlCommand>();
+            services.AddTransient<ISavePlayerSqlCommand, SavePlayerSqlCommand>();
         }
     }
 }
