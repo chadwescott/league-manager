@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[Leagues]
+(
+	[Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT newsequentialid(), 
+    [Name] NVARCHAR(100) NOT NULL
+)
