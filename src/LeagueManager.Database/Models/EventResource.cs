@@ -1,0 +1,24 @@
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace LeagueManager.Database.Models
+{
+    [Table("Events")]
+    public class EventResource
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("Id")]
+        public Guid Id { get; set; }
+
+        [Column("SeasonId")]
+        public Guid SeasonId { get; set; }
+
+        [Column("Name")]
+        public string Name { get; set; }
+
+        [Column("StartTime")]
+        public DateTime StartTime { get; set; }
+    }
+}

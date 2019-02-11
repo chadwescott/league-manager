@@ -12,6 +12,8 @@ namespace LeagueManager.Database
             : base(connectionString)
         { }
 
+        public DbSet<EventResource> Events { get; set;  }
+
         public DbSet<PlayerResource> Players { get; set; }
     }
 }

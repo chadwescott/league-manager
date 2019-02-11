@@ -14,5 +14,8 @@ namespace LeagueManager.Domain.Responses
 
         [JsonProperty("startTime")]
         public DateTime StartTime { get; set; }
+
+        [JsonProperty("links")]
+        public LinkResponse[] Links { get; set; }
     }
 }

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using System.Linq;
 
+using LeagueManager.Api.Mappers.Responses;
+using LeagueManager.Business.Commands;
 using LeagueManager.Domain.Responses;
 
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +14,12 @@ namespace LeagueManager.Api.Controllers
     [Route("/api/" + Routes.Events)]
     public class EventController : BaseController
     {
-        //private readonly IGetAllEvents _getAllEvents;
+        private readonly IGetAllEvents _getAllEvents;
 
-        //public EventController(IGetAllEvents getAllEvents)
-        //{
-        //    _getAllEvents = getAllEvents;
-        //}
+        public EventController(IGetAllEvents getAllEvents)
+        {
+            _getAllEvents = getAllEvents;
+        }
 
         /// <summary>
         /// Gets the user with the specified pin.
@@ -31,26 +33,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(500)]
         public ActionResult<EventResponse[]> Get()
         {
-            //var events = _getAllEvents.Execute();
-            //var response = events.Select(x => x.ToResponse()).ToArray();
-            //return new OkObjectResult(response);
-            // TODO: Wire up to back end
-            var events = new EventResponse[]
-            {
-                new EventResponse
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Tuesday",
-                    StartTime = DateTime.Parse("1/29/2019 06:00")
-                },
-                new EventResponse
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Thursday",
-                    StartTime = DateTime.Parse("1/31/2019 06:00")
-                }
-            };
-            return new OkObjectResult(events);
+            var events = _getAllEvents.Execute();
+            var response = events.Select(x => x.ToResponse()).ToArray();
+            return new OkObjectResult(response);
         }
     }
 }

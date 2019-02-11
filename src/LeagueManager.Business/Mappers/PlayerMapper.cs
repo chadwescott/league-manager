@@ -18,17 +18,17 @@ namespace LeagueManager.Business.Mappers
                     Email = resource.Email
                 };
         }
-        public static PlayerResource ToPlayerResource(this Player player)
+        public static PlayerResource ToPlayerResource(this Player model)
         {
-            return player == null
+            return model == null
                 ? null
                 : new PlayerResource
                 {
-                    Id = player.Id,
-                    FirstName = player.FirstName,
-                    LastName = player.LastName,
-                    NickName = player.NickName,
-                    Email = player.Email
+                    Id = model.Id,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    NickName = model.NickName,
+                    Email = model.Email
                 };
         }
     }

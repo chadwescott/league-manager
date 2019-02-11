@@ -4,25 +4,23 @@ using LeagueManager.Domain.Responses;
 
 namespace LeagueManager.Api.Mappers.Responses
 {
-    public static class PlayerResponseMapper
+    public static class EventResponseMapper
     {
-        public static PlayerResponse ToResponse(this Player model)
+        public static EventResponse ToResponse(this Event model)
         {
-            return new PlayerResponse
+            return new EventResponse
             {
                 Id = model.Id,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                NickName = model.NickName,
-                Email = model.Email,
+                Name = model.Name,
+                StartTime = model.StartTime,
                 Links = new LinkResponse[]
                 {
                     new LinkResponse
                     {
-                        Href = $"/{Routes.Players}/{model.Id}/{Routes.Leagues}",
+                        Href = $"/{Routes.Seasons}/{model.SeasonId}",
                         MediaType = MediaTypes.Json,
                         Method = Methods.GET,
-                        Rel = LinkTypes.LEAGUES 
+                        Rel = LinkTypes.SEASONS
                     }
                 }
             };

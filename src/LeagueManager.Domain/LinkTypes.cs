@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LeagueManager.Domain
+﻿namespace LeagueManager.Domain
 {
     public static class LinkTypes
     {
         public const string LEAGUES = "leagues";
+        public const string SEASONS = "seasons";
     }
 }

@@ -8,6 +8,8 @@ namespace LeagueManager.Database
 {
     internal interface ILeagueManagerContext : IDbContext
     {
+        DbSet<EventResource> Events { get; set;  }
+
         DbSet<PlayerResource> Players { get; set;  }
     }
 }
