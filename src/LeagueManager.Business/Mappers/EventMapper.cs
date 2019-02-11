@@ -3,9 +3,9 @@ using LeagueManager.Database.Models;
 
 namespace LeagueManager.Business.Mappers
 {
-    internal static class EventMapper
+    internal class EventMapper : IResourceMapper<Event, EventResource>
     {
-        public static Event ToEvent(this EventResource resource)
+        public Event ToModel(EventResource resource)
         {
             return resource == null
                 ? null
@@ -17,7 +17,8 @@ namespace LeagueManager.Business.Mappers
                     StartTime = resource.StartTime
                 };
         }
-        public static EventResource ToEventResource(this Event model)
+
+        public EventResource ToResource(Event model)
         {
             return model == null
                 ? null

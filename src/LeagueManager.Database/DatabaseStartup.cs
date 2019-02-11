@@ -18,9 +18,11 @@ namespace LeagueManager.Database
 
             services.AddSingleton<IContextFactory<IDbContext>>(x => new ContextFactory<ILeagueManagerContext>(settings.ConnectionString, -1));
 
-            services.AddSingleton<IGetAllEventsSqlCommand, GetAllEventsSqlCommand>();
+            services.AddSingleton<IGetAllResourcesSqlCommand<EventResource>, GetAllEventsSqlCommand>();
+            services.AddTransient<IGetByIdSqlCommand<EventResource>, GetByIdSqlCommand<EventResource>>();
+            services.AddSingleton<ISaveSqlCommand<EventResource>, SaveSqlCommand<EventResource>>();
 
-            services.AddSingleton<IGetAllPlayersSqlCommand, GetAllPlayersSqlCommand>();
+            services.AddSingleton<IGetAllResourcesSqlCommand<PlayerResource>, GetAllPlayersSqlCommand>();
             services.AddTransient<IGetByIdSqlCommand<PlayerResource>, GetByIdSqlCommand<PlayerResource>>();
             services.AddSingleton<ISaveSqlCommand<PlayerResource>, SaveSqlCommand<PlayerResource>>();
         }

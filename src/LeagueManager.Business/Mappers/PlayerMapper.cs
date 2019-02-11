@@ -3,9 +3,9 @@ using LeagueManager.Database.Models;
 
 namespace LeagueManager.Business.Mappers
 {
-    internal static class PlayerMapper
+    internal class PlayerMapper : IResourceMapper<Player, PlayerResource>
     {
-        public static Player ToPlayer(this PlayerResource resource)
+        public Player ToModel(PlayerResource resource)
         {
             return resource == null
                 ? null
@@ -18,7 +18,8 @@ namespace LeagueManager.Business.Mappers
                     Email = resource.Email
                 };
         }
-        public static PlayerResource ToPlayerResource(this Player model)
+
+        public PlayerResource ToResource(Player model)
         {
             return model == null
                 ? null

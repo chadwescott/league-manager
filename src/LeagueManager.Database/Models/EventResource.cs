@@ -2,10 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using LeagueManager.DataAccess;
+
 namespace LeagueManager.Database.Models
 {
     [Table("Events")]
-    public class EventResource
+    public class EventResource : IHasId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

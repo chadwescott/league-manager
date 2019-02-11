@@ -1,8 +1,10 @@
 ﻿using System;
 
+using LeagueManager.DataAccess;
+
 namespace LeagueManager.Business.Models
 {
-    public class Player
+    public class Player : IHasId
     {
         public Guid Id { get; set; }
 

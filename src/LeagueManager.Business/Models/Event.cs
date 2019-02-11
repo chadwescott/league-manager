@@ -1,8 +1,10 @@
 ﻿using System;
 
+using LeagueManager.DataAccess;
+
 namespace LeagueManager.Business.Models
 {
-    public class Event
+    public class Event : IHasId
     {
         public Guid Id { get; set; }
 

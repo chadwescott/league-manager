@@ -7,7 +7,7 @@ using LeagueManager.Database.Models;
 
 namespace LeagueManager.Database.Commands.Impl
 {
-    internal class GetAllEventsSqlCommand : RepositoryRead<EventResource, IEnumerable<EventResource>>, IGetAllEventsSqlCommand
+    internal class GetAllEventsSqlCommand : RepositoryRead<EventResource, IEnumerable<EventResource>>, IGetAllResourcesSqlCommand<EventResource>
     {
         public GetAllEventsSqlCommand(IContextFactory<IDbContext> contextFactory)
             : base(contextFactory)

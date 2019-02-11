@@ -7,7 +7,7 @@ using LeagueManager.Database.Models;
 
 namespace LeagueManager.Database.Commands.Impl
 {
-    internal class GetAllPlayersSqlCommand : RepositoryRead<PlayerResource, IEnumerable<PlayerResource>>, IGetAllPlayersSqlCommand
+    internal class GetAllPlayersSqlCommand : RepositoryRead<PlayerResource, IEnumerable<PlayerResource>>, IGetAllResourcesSqlCommand<PlayerResource>
     {
         public GetAllPlayersSqlCommand(IContextFactory<IDbContext> contextFactory)
             : base(contextFactory)

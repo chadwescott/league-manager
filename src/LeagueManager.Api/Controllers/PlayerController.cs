@@ -4,6 +4,7 @@ using System.Linq;
 using LeagueManager.Api.Mappers.Requests;
 using LeagueManager.Api.Mappers.Responses;
 using LeagueManager.Business.Commands;
+using LeagueManager.Business.Models;
 using LeagueManager.Domain.Requests;
 using LeagueManager.Domain.Responses;
 
@@ -17,14 +18,14 @@ namespace LeagueManager.Api.Controllers
     [Route("/api/" + Routes.Players)]
     public class PlayerController : BaseController
     {
-        private readonly IGetAllPlayers _getAllPlayers;
+        private readonly IGetAllModels<Player> _getAllPlayers;
         private readonly IGetPlayerById _getPlayerById;
-        private readonly ISavePlayer _savePlayer;
+        private readonly ISaveModel<Player> _savePlayer;
 
         public PlayerController(
-            IGetAllPlayers getAllPlayers,
+            IGetAllModels<Player> getAllPlayers,
             IGetPlayerById getPlayerById,
-            ISavePlayer savePlayer)
+            ISaveModel<Player> savePlayer)
         {
             _getAllPlayers = getAllPlayers;
             _getPlayerById = getPlayerById;
