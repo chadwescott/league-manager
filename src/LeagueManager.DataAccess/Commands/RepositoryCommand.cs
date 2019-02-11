@@ -10,7 +10,5 @@ namespace LeagueManager.DataAccess.Commands
         }
 
         protected readonly IContextFactory<IDbContext> ContextFactory;
-
-        public abstract void Execute();
     }
 }

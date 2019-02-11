@@ -17,8 +17,7 @@ namespace LeagueManager.Business.Commands.Impl
 
         public Player[] Execute()
         {
-            _sqlCommand.Execute();
-            return _sqlCommand.Result.Select(x => x.ToPlayer()).ToArray();
+            return _sqlCommand.Execute().Select(x => x.ToPlayer()).ToArray();
         }
     }
 }

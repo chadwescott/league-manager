@@ -13,12 +13,13 @@ namespace LeagueManager.Database.Commands.Impl
             : base(contextFactory)
         { }
 
-        public override void Execute()
+        public IEnumerable<PlayerResource> Execute()
         {
             InvokeRepositoryRead(r =>
             {
                 Result = r.GetAll().OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
             });
+            return Result;
         }
     }
 }

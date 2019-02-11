@@ -6,18 +6,18 @@ namespace LeagueManager.DataAccess.Commands
 {
     public abstract class RepositorySave<T> : RepositoryChange<T> where T : class, IHasId
     {
-        protected RepositorySave(IContextFactory<IDbContext> contextFactory, T model)
-            : base(contextFactory, model)
+        protected RepositorySave(IContextFactory<IDbContext> contextFactory)
+            : base(contextFactory)
         { }
 
-        public override void Execute()
+        public void Execute(T resource)
         {
             InvokeRepositoryAndSave(repository =>
             {
-                if (Result.Id == Guid.Empty)
-                    repository.Insert(Result);
+                if (resource.Id == Guid.Empty)
+                    repository.Insert(resource);
                 else
-                    repository.Update(Result);
+                    repository.Update(resource);
             });
         }
     }

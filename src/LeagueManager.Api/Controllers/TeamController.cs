@@ -1,6 +1,7 @@
 ﻿using System;
 using LeagueManager.Domain.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace LeagueManager.Api.Controllers
 {
@@ -21,10 +22,11 @@ namespace LeagueManager.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("/api/" + Routes.Events + "/{eventId}/" + Routes.Teams)]
-        [ProducesResponseType(200, Type = typeof(TeamResponse[]))]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
+        [SwaggerOperation(OperationId = "getTeams", Tags = new[] { "Team" })]
+        [SwaggerResponse(200, Type = typeof(TeamResponse[]))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
         public ActionResult<TeamResponse[]> GetTeamsBySession([FromRoute] Guid eventId)
         {
             //var teams = _getAllTeams.Execute();

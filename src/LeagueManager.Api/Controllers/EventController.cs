@@ -1,6 +1,10 @@
 ﻿using System;
+
 using LeagueManager.Domain.Responses;
+
 using Microsoft.AspNetCore.Mvc;
+
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace LeagueManager.Api.Controllers
 {
@@ -20,10 +24,11 @@ namespace LeagueManager.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(EventResponse[]))]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
+        [SwaggerOperation(OperationId = "getEvents", Tags = new[] { "Event" })]
+        [SwaggerResponse(200, Type = typeof(EventResponse[]))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
         public ActionResult<EventResponse[]> Get()
         {
             //var events = _getAllEvents.Execute();

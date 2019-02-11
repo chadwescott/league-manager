@@ -1,22 +1,32 @@
-﻿using LeagueManager.Business.Mappers;
+﻿using System;
+
+using LeagueManager.Business.Mappers;
 using LeagueManager.Business.Models;
 using LeagueManager.Database.Commands;
+using LeagueManager.Database.Models;
 
 namespace LeagueManager.Business.Commands.Impl
 {
     internal class SavePlayer : ISavePlayer
     {
-        private readonly ISavePlayerSqlCommand _command;
+        private readonly IGetByIdSqlCommand<PlayerResource> _getByIdCommand;
+        private readonly ISaveSqlCommand<PlayerResource> _saveCommand;
 
-        public SavePlayer(ISavePlayerSqlCommand command)
+        public SavePlayer(IGetByIdSqlCommand<PlayerResource> getByIdCommand, ISaveSqlCommand<PlayerResource> saveCommand)
         {
-            _command = command;
+            _getByIdCommand = getByIdCommand;
+            _saveCommand = saveCommand;
         }
 
         public Player Execute(Player player)
         {
             var resource = player.ToPlayerResource();
-            _command.Execute(resource);
+
+            if (player.Id != Guid.Empty)
+            {
+                _getByIdCommand.Execute(player.Id);
+            }
+            _saveCommand.Execute(resource);
             return resource.ToPlayer();
         }
     }

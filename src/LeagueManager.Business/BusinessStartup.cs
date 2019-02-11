@@ -14,6 +14,7 @@ namespace LeagueManager.Business
             services.ConfigureDatabaseServices(configuration);
 
             services.AddTransient<IGetAllPlayers, GetAllPlayers>();
+            services.AddTransient<IGetPlayerById, GetPlayerById>();
             services.AddTransient<ISavePlayer, SavePlayer>();
         }
     }

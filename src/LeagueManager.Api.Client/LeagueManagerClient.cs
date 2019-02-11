@@ -19,5 +19,11 @@ namespace LeagueManager.Api.Client
             var command = new GetPlayersCommand(_baseUri);
             return command.Execute();
         }
+
+        public PlayerResponse GetPlayerById(Guid id)
+        {
+            var command = new GetPlayerByIdCommand(_baseUri, id);
+            return command.Execute();
+        }
     }
 }

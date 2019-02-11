@@ -1,6 +1,10 @@
 ﻿using System;
+
 using LeagueManager.Domain.Responses;
+
 using Microsoft.AspNetCore.Mvc;
+
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace LeagueManager.Api.Controllers
 {
@@ -20,17 +24,21 @@ namespace LeagueManager.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("/api/" + Routes.Seasons + "/{seasonId}")]
-        [ProducesResponseType(200, Type = typeof(SeasonResponse[]))]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
-        public ActionResult<SeasonResponse> Get([FromRoute] Guid seasonId)
+        [SwaggerOperation(OperationId = "getSeasons", Tags = new[] { "Season" })]
+        [SwaggerResponse(200, Type = typeof(SeasonResponse[]))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
+        public ActionResult<SeasonResponse[]> Get([FromRoute] Guid seasonId)
         {
             // TODO: Wire up to back end
-            var seasons = new SeasonResponse
+            var seasons = new []
             {
-                Id = seasonId,
-                Name = "2019"
+                new SeasonResponse
+                {
+                    Id = seasonId,
+                    Name = "2019"
+                }
             };
             return new OkObjectResult(seasons);
         }

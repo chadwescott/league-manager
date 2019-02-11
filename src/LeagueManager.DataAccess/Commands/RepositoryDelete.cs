@@ -4,15 +4,15 @@ namespace LeagueManager.DataAccess.Commands
 {
     public abstract class RepositoryDelete<T> : RepositoryChange<T> where T : class, IHasId
     {
-        protected RepositoryDelete(IContextFactory<IDbContext> contextFactory, T model)
-            : base(contextFactory, model)
+        protected RepositoryDelete(IContextFactory<IDbContext> contextFactory)
+            : base(contextFactory)
         { }
 
-        public override void Execute()
+        public void Execute(T resource)
         {
             InvokeRepositoryAndSave(repository =>
             {
-                repository.Delete(Result);
+                repository.Delete(resource);
             });
         }
     }

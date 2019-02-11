@@ -9,6 +9,8 @@ using LeagueManager.Domain.Responses;
 
 using Microsoft.AspNetCore.Mvc;
 
+using Swashbuckle.AspNetCore.Annotations;
+
 namespace LeagueManager.Api.Controllers
 {
     [ApiController]
@@ -16,21 +18,25 @@ namespace LeagueManager.Api.Controllers
     public class PlayerController : BaseController
     {
         private readonly IGetAllPlayers _getAllPlayers;
+        private readonly IGetPlayerById _getPlayerById;
         private readonly ISavePlayer _savePlayer;
 
         public PlayerController(
             IGetAllPlayers getAllPlayers,
+            IGetPlayerById getPlayerById,
             ISavePlayer savePlayer)
         {
             _getAllPlayers = getAllPlayers;
+            _getPlayerById = getPlayerById;
             _savePlayer = savePlayer;
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(PlayerResponse[]))]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
+        [SwaggerOperation(OperationId = "getPlayers", Tags = new[] { "Player" })]
+        [SwaggerResponse(200, Type = typeof(PlayerResponse[]))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
         public ActionResult<PlayerResponse[]> Get()
         {
             var players = _getAllPlayers.Execute();
@@ -38,11 +44,28 @@ namespace LeagueManager.Api.Controllers
             return new OkObjectResult(response);
         }
 
+        [HttpGet]
+        [Route("/api/" + Routes.Players + "/{playerId}")]
+        [SwaggerOperation(OperationId = "getPlayerById", Tags = new[] { "Player" })]
+        [SwaggerResponse(200, Type = typeof(PlayerResponse))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
+        public ActionResult<PlayerResponse> Get([FromRoute] Guid playerId)
+        {
+            var player = _getPlayerById.Execute(playerId);
+            if (player == null)
+                return new NotFoundResult();
+
+            return new OkObjectResult(player.ToResponse());
+        }
+
         [HttpPost]
-        [ProducesResponseType(200, Type = typeof(PlayerResponse))]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
+        [SwaggerOperation(OperationId = "createPlayer", Tags = new[] { "Player" })]
+        [SwaggerResponse(200, Type = typeof(PlayerResponse))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
         public ActionResult<PlayerResponse> Post(PlayerRequest request)
         {
             var player = _savePlayer.Execute(request.ToPlayer());
@@ -52,10 +75,11 @@ namespace LeagueManager.Api.Controllers
 
         [HttpPut]
         [Route("/api/" + Routes.Players + "/{playerId}")]
-        [ProducesResponseType(200, Type = typeof(PlayerResponse))]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
+        [SwaggerOperation(OperationId = "updatePlayer", Tags = new[] { "Player" })]
+        [SwaggerResponse(200, Type = typeof(PlayerResponse))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
         public ActionResult<PlayerResponse> Put([FromRoute] Guid playerId, PlayerRequest request)
         {
             var player = request.ToPlayer();

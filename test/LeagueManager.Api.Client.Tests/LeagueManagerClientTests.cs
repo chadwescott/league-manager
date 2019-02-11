@@ -1,3 +1,4 @@
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LeagueManager.Api.Client.Tests
@@ -13,7 +14,7 @@ namespace LeagueManager.Api.Client.Tests
         {
             var settings = new LeagueManagerClientSettings
             {
-                BaseUrl = "https://localhost:44303/baan/api/100/"
+                BaseUrl = "http://league-manager.com/api/"
             };
 
             _client = new LeagueManagerClient(settings);
@@ -22,8 +23,22 @@ namespace LeagueManager.Api.Client.Tests
         [TestMethod]
         public void GetPlayersFromClient_Validation()
         {
-            var user = _client.GetPlayers();
-            Assert.IsNull(user);
+            var players = _client.GetPlayers();
+            Assert.IsNotNull(players);
+        }
+
+        [TestMethod]
+        public void GetPlayerByIdFromClient_ValidId()
+        {
+            var player = _client.GetPlayerById(new Guid("1fde3a6e-4b1e-e911-b709-34f64b38f15c"));
+            Assert.IsNotNull(player);
+        }
+
+        [TestMethod]
+        public void GetPlayerByIdFromClient_InvalidId()
+        {
+            var player = _client.GetPlayerById(Guid.Empty);
+            Assert.IsNull(player);
         }
     }
 }

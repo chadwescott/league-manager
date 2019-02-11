@@ -25,17 +25,21 @@ namespace LeagueManager.Api
             services.ConfigureBusinessServices(Configuration);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddSwaggerGen(x => x.SwaggerDoc("v1", new Info
+            services.AddSwaggerGen(x =>
             {
-                Title = "League Manager REST services",
-                Version = "v1",
-                Description = "A REST service with commands to manage a sports league.",
-                Contact = new Contact
+                x.SwaggerDoc("v1", new Info
                 {
-                    Name = "Chad Wescott",
-                    Email = "chadwescott@gmail.com"
-                }
-            }));
+                    Title = "League Manager REST services",
+                    Version = "v1",
+                    Description = "A REST service with commands to manage a sports league.",
+                    Contact = new Contact
+                    {
+                        Name = "Chad Wescott",
+                        Email = "chadwescott@gmail.com"
+                    }
+                });
+                x.EnableAnnotations();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

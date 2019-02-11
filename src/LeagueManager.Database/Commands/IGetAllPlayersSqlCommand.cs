@@ -6,8 +6,6 @@ namespace LeagueManager.Database.Commands
 {
     public interface IGetAllPlayersSqlCommand
     {
-        IEnumerable<PlayerResource> Result { get; }
-
-        void Execute();
+        IEnumerable<PlayerResource> Execute();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using LeagueManager.DataAccess.Context;
 using LeagueManager.Database.Commands;
 using LeagueManager.Database.Commands.Impl;
-
+using LeagueManager.Database.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,8 +17,9 @@ namespace LeagueManager.Database
 
             services.AddSingleton<IContextFactory<IDbContext>>(x => new ContextFactory<ILeagueManagerContext>(settings.ConnectionString, -1));
 
-            services.AddTransient<IGetAllPlayersSqlCommand, GetAllPlayersSqlCommand>();
-            services.AddTransient<ISavePlayerSqlCommand, SavePlayerSqlCommand>();
+            services.AddSingleton<IGetAllPlayersSqlCommand, GetAllPlayersSqlCommand>();
+            services.AddTransient<IGetByIdSqlCommand<PlayerResource>, GetByIdSqlCommand<PlayerResource>>();
+            services.AddSingleton<ISaveSqlCommand<PlayerResource>, SaveSqlCommand<PlayerResource>>();
         }
     }
 }
