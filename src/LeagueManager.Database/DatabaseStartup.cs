@@ -25,6 +25,10 @@ namespace LeagueManager.Database
             services.AddSingleton<IGetAllResourcesSqlCommand<PlayerResource>, GetAllPlayersSqlCommand>();
             services.AddTransient<IGetByIdSqlCommand<PlayerResource>, GetByIdSqlCommand<PlayerResource>>();
             services.AddSingleton<ISaveSqlCommand<PlayerResource>, SaveSqlCommand<PlayerResource>>();
+
+            services.AddSingleton<IGetAllResourcesSqlCommand<SeasonResource>, GetAllResourcesSqlCommand<SeasonResource>>();
+            services.AddTransient<IGetByIdSqlCommand<SeasonResource>, GetByIdSqlCommand<SeasonResource>>();
+            services.AddSingleton<ISaveSqlCommand<SeasonResource>, SaveSqlCommand<SeasonResource>>();
         }
     }
 }

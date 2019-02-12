@@ -25,6 +25,11 @@ namespace LeagueManager.Business
             services.AddTransient<IGetModelById<Player>, GetModelById<Player, PlayerResource>>();
             services.AddTransient<IResourceMapper<Player, PlayerResource>, PlayerMapper>();
             services.AddTransient<ISaveModel<Player>, SaveModel<Player, PlayerResource>>();
+
+            services.AddTransient<IGetAllModels<Season>, GetAllModels<Season, SeasonResource>>();
+            services.AddTransient<IGetModelById<Season>, GetModelById<Season, SeasonResource>>();
+            services.AddTransient<IResourceMapper<Season, SeasonResource>, SeasonMapper>();
+            services.AddTransient<ISaveModel<Season>, SaveModel<Season, SeasonResource>>();
         }
     }
 }

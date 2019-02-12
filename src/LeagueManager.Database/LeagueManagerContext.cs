@@ -15,5 +15,7 @@ namespace LeagueManager.Database
         public DbSet<EventResource> Events { get; set;  }
 
         public DbSet<PlayerResource> Players { get; set; }
+
+        public DbSet<SeasonResource> Seasons { get; set; }
     }
 }

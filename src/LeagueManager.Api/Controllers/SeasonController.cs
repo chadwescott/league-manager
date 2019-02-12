@@ -1,5 +1,11 @@
 ﻿using System;
+using System.Linq;
 
+using LeagueManager.Api.Mappers.Requests;
+using LeagueManager.Api.Mappers.Responses;
+using LeagueManager.Business.Commands;
+using LeagueManager.Business.Models;
+using LeagueManager.Domain.Requests;
 using LeagueManager.Domain.Responses;
 
 using Microsoft.AspNetCore.Mvc;
@@ -9,38 +15,80 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace LeagueManager.Api.Controllers
 {
     [ApiController]
+    [Route("/api/" + Routes.Seasons)]
     public class SeasonController : BaseController
     {
-        //private readonly IGetSeasonById _getSeasonById;
+        private readonly IGetAllModels<Season> _getAllSeasons;
+        private readonly IGetModelById<Season> _getSeasonById;
+        private readonly ISaveModel<Season> _saveSeason;
 
-        //public SeasonController(IGetSeasonById getSeasonById)
-        //{
-        //    _getSeasonById = getSeasonById;
-        //}
+        public SeasonController(
+            IGetAllModels<Season> getAllSeasons,
+            IGetModelById<Season> getSeasonById,
+            ISaveModel<Season> saveSeason)
+        {
+            _getAllSeasons = getAllSeasons;
+            _getSeasonById = getSeasonById;
+            _saveSeason = saveSeason;
+        }
 
-        /// <summary>
-        /// Gets the user with the specified pin.
-        /// </summary>
-        /// <returns></returns>
         [HttpGet]
-        [Route("/api/" + Routes.Seasons + "/{seasonId}")]
         [SwaggerOperation(OperationId = "getSeasons", Tags = new[] { "Season" })]
         [SwaggerResponse(200, Type = typeof(SeasonResponse[]))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<SeasonResponse[]> Get([FromRoute] Guid seasonId)
+        public ActionResult<SeasonResponse[]> Get()
         {
-            // TODO: Wire up to back end
-            var seasons = new []
-            {
-                new SeasonResponse
-                {
-                    Id = seasonId,
-                    Name = "2019"
-                }
-            };
-            return new OkObjectResult(seasons);
+            var Seasons = _getAllSeasons.Execute();
+            var response = Seasons.Select(x => x.ToResponse()).ToArray();
+            return new OkObjectResult(response);
+        }
+
+        [HttpGet]
+        [Route("/api/" + Routes.Seasons + "/{SeasonId}")]
+        [SwaggerOperation(OperationId = "getSeasonById", Tags = new[] { "Season" })]
+        [SwaggerResponse(200, Type = typeof(SeasonResponse))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
+        public ActionResult<SeasonResponse> Get([FromRoute] Guid SeasonId)
+        {
+            var Season = _getSeasonById.Execute(SeasonId);
+            if (Season == null)
+                return new NotFoundResult();
+
+            return new OkObjectResult(Season.ToResponse());
+        }
+
+        [HttpPost]
+        [SwaggerOperation(OperationId = "createSeason", Tags = new[] { "Season" })]
+        [SwaggerResponse(200, Type = typeof(SeasonResponse))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
+        public ActionResult<SeasonResponse> Post(SeasonRequest request)
+        {
+            var Season = _saveSeason.Execute(request.ToSeason());
+            var response = Season.ToResponse();
+            return new OkObjectResult(response);
+        }
+
+        [HttpPut]
+        [Route("/api/" + Routes.Seasons + "/{SeasonId}")]
+        [SwaggerOperation(OperationId = "updateSeason", Tags = new[] { "Season" })]
+        [SwaggerResponse(200, Type = typeof(SeasonResponse))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
+        public ActionResult<SeasonResponse> Put([FromRoute] Guid SeasonId, SeasonRequest request)
+        {
+            var Season = request.ToSeason();
+            Season.Id = SeasonId;
+
+            Season = _saveSeason.Execute(Season);
+            var response = Season.ToResponse();
+            return new OkObjectResult(response);
         }
     }
 }

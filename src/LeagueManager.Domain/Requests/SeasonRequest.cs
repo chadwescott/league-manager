@@ -2,20 +2,20 @@
 
 using Newtonsoft.Json;
 
-namespace LeagueManager.Domain.Responses
+namespace LeagueManager.Domain.Requests
 {
-    public class SeasonResponse
+    public class SeasonRequest
     {
         [JsonProperty("id")]
         public Guid Id { get; set; }
+
+        [JsonProperty("leagueId")]
+        public Guid LeagueId { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
 
         [JsonProperty("sortOrder")]
         public int SortOrder { get; set; }
-
-        [JsonProperty("links")]
-        public LinkResponse[] Links { get; set; }
     }
 }
