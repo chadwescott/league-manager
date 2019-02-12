@@ -17,12 +17,12 @@ namespace LeagueManager.Business
             services.ConfigureDatabaseServices(configuration);
 
             services.AddTransient<IGetAllModels<Event>, GetAllModels<Event, EventResource>>();
-            services.AddTransient<IGetEventById, GetEventById>();
+            services.AddTransient<IGetModelById<Event>, GetModelById<Event, EventResource>>();
             services.AddTransient<IResourceMapper<Event, EventResource>, EventMapper>();
             services.AddTransient<ISaveModel<Event>, SaveModel<Event, EventResource>>();
 
             services.AddTransient<IGetAllModels<Player>, GetAllModels<Player, PlayerResource>>();
-            services.AddTransient<IGetPlayerById, GetPlayerById>();
+            services.AddTransient<IGetModelById<Player>, GetModelById<Player, PlayerResource>>();
             services.AddTransient<IResourceMapper<Player, PlayerResource>, PlayerMapper>();
             services.AddTransient<ISaveModel<Player>, SaveModel<Player, PlayerResource>>();
         }

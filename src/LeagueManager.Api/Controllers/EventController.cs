@@ -19,12 +19,12 @@ namespace LeagueManager.Api.Controllers
     public class EventController : BaseController
     {
         private readonly IGetAllModels<Event> _getAllEvents;
-        private readonly IGetEventById _getEventById;
+        private readonly IGetModelById<Event> _getEventById;
         private readonly ISaveModel<Event> _saveEvent;
 
         public EventController(
             IGetAllModels<Event> getAllEvents,
-            IGetEventById getEventById,
+            IGetModelById<Event> getEventById,
             ISaveModel<Event> saveEvent)
         {
             _getAllEvents = getAllEvents;

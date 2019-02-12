@@ -19,12 +19,12 @@ namespace LeagueManager.Api.Controllers
     public class PlayerController : BaseController
     {
         private readonly IGetAllModels<Player> _getAllPlayers;
-        private readonly IGetPlayerById _getPlayerById;
+        private readonly IGetModelById<Player> _getPlayerById;
         private readonly ISaveModel<Player> _savePlayer;
 
         public PlayerController(
             IGetAllModels<Player> getAllPlayers,
-            IGetPlayerById getPlayerById,
+            IGetModelById<Player> getPlayerById,
             ISaveModel<Player> savePlayer)
         {
             _getAllPlayers = getAllPlayers;
