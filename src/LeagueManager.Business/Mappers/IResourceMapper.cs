@@ -1,4 +1,4 @@
-﻿using LeagueManager.DataAccess;
+﻿using LeagueManager.Database.Models;
 
 namespace LeagueManager.Business.Mappers
 {

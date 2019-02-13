@@ -20,15 +20,18 @@ namespace LeagueManager.Api.Controllers
     {
         private readonly IGetAllModels<Event> _getAllEvents;
         private readonly IGetModelById<Event> _getEventById;
+        private readonly IGetTeamsByEvent _getTeamsByEvent;
         private readonly ISaveModel<Event> _saveEvent;
 
         public EventController(
             IGetAllModels<Event> getAllEvents,
             IGetModelById<Event> getEventById,
+            IGetTeamsByEvent getTeamsByEvent,
             ISaveModel<Event> saveEvent)
         {
             _getAllEvents = getAllEvents;
             _getEventById = getEventById;
+            _getTeamsByEvent = getTeamsByEvent;
             _saveEvent = saveEvent;
         }
 
@@ -37,7 +40,7 @@ namespace LeagueManager.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [SwaggerOperation(OperationId = "getEvents", Tags = new[] { "Event" })]
+        [SwaggerOperation(OperationId = "getEvents", Tags = new[] { Categories.Events })]
         [SwaggerResponse(200, Type = typeof(EventResponse[]))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
@@ -51,7 +54,7 @@ namespace LeagueManager.Api.Controllers
 
         [HttpGet]
         [Route("/api/" + Routes.Events + "/{eventId}")]
-        [SwaggerOperation(OperationId = "getEventById", Tags = new[] { "Event" })]
+        [SwaggerOperation(OperationId = "getEventById", Tags = new[] { Categories.Events })]
         [SwaggerResponse(200, Type = typeof(EventResponse))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
@@ -65,8 +68,24 @@ namespace LeagueManager.Api.Controllers
             return new OkObjectResult(model.ToResponse());
         }
 
+        [HttpGet]
+        [Route("/api/" + Routes.Events + "/{eventId}/teams")]
+        [SwaggerOperation(OperationId = "getTeamsByEventId", Tags = new[] { Categories.Events })]
+        [SwaggerResponse(200, Type = typeof(TeamResponse[]))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
+        public ActionResult<TeamResponse[]> GetTeamsByEventId([FromRoute] Guid eventId)
+        {
+            var model = _getTeamsByEvent.Execute(eventId);
+            if (model == null)
+                return new NotFoundResult();
+
+            return new OkObjectResult(model.Select(x => x.ToResponse()).ToArray());
+        }
+
         [HttpPost]
-        [SwaggerOperation(OperationId = "createEvent", Tags = new[] { "Event" })]
+        [SwaggerOperation(OperationId = "createEvent", Tags = new[] { Categories.Events })]
         [SwaggerResponse(200, Type = typeof(EventResponse))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
@@ -80,7 +99,7 @@ namespace LeagueManager.Api.Controllers
 
         [HttpPut]
         [Route("/api/" + Routes.Events + "/{eventId}")]
-        [SwaggerOperation(OperationId = "updateEvent", Tags = new[] { "Event" })]
+        [SwaggerOperation(OperationId = "updateEvent", Tags = new[] { Categories.Events })]
         [SwaggerResponse(200, Type = typeof(EventResponse))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]

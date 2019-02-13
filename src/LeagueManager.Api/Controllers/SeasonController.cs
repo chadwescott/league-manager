@@ -33,7 +33,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         [HttpGet]
-        [SwaggerOperation(OperationId = "getSeasons", Tags = new[] { "Season" })]
+        [SwaggerOperation(OperationId = "getSeasons", Tags = new[] { Categories.Seasons })]
         [SwaggerResponse(200, Type = typeof(SeasonResponse[]))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
@@ -47,7 +47,7 @@ namespace LeagueManager.Api.Controllers
 
         [HttpGet]
         [Route("/api/" + Routes.Seasons + "/{SeasonId}")]
-        [SwaggerOperation(OperationId = "getSeasonById", Tags = new[] { "Season" })]
+        [SwaggerOperation(OperationId = "getSeasonById", Tags = new[] { Categories.Seasons })]
         [SwaggerResponse(200, Type = typeof(SeasonResponse))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
@@ -62,7 +62,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         [HttpPost]
-        [SwaggerOperation(OperationId = "createSeason", Tags = new[] { "Season" })]
+        [SwaggerOperation(OperationId = "createSeason", Tags = new[] { Categories.Seasons })]
         [SwaggerResponse(200, Type = typeof(SeasonResponse))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
@@ -76,7 +76,7 @@ namespace LeagueManager.Api.Controllers
 
         [HttpPut]
         [Route("/api/" + Routes.Seasons + "/{SeasonId}")]
-        [SwaggerOperation(OperationId = "updateSeason", Tags = new[] { "Season" })]
+        [SwaggerOperation(OperationId = "updateSeason", Tags = new[] { Categories.Seasons })]
         [SwaggerResponse(200, Type = typeof(SeasonResponse))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]

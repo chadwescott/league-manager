@@ -1,10 +1,11 @@
-﻿CREATE VIEW dbo.Results_V
+﻿
+CREATE VIEW [dbo].[Results_V]
 AS
 SELECT        dbo.Events.[Name], dbo.Events.StartTime, dbo.Teams.TeamNumber, dbo.Teams.Wins, dbo.Teams.Losses, dbo.Players.FirstName, dbo.Players.LastName, dbo.Players.Nickname
 FROM            dbo.Events INNER JOIN
                          dbo.Teams ON dbo.Events.Id = dbo.Teams.EventId INNER JOIN
-                         dbo.TeamPlayers ON dbo.Teams.Id = dbo.TeamPlayers.TeamId INNER JOIN
-                         dbo.Players ON dbo.TeamPlayers.PlayerId = dbo.Players.Id
+                         dbo.TeamPlayerXref ON dbo.Teams.Id = dbo.TeamPlayerXref.TeamId INNER JOIN
+                         dbo.Players ON dbo.TeamPlayerXref.PlayerId = dbo.Players.Id
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'Results_V';
 

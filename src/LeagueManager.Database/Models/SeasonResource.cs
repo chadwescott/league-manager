@@ -2,8 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using LeagueManager.DataAccess;
-
 namespace LeagueManager.Database.Models
 {
     [Table("Seasons")]
@@ -17,7 +15,11 @@ namespace LeagueManager.Database.Models
         [Column("LeagueId")]
         public Guid LeagueId { get; set; }
 
+        [ForeignKey("Id")]
+        public LeagueResource League { get; set; }
+
         [Column("Name")]
+        [MaxLength(100)]
         public string Name { get; set; }
 
         [Column("SortOrder")]

@@ -2,8 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using LeagueManager.DataAccess;
-
 namespace LeagueManager.Database.Models
 {
     [Table("Events")]
@@ -18,6 +16,7 @@ namespace LeagueManager.Database.Models
         public Guid SeasonId { get; set; }
 
         [Column("Name")]
+        [MaxLength(200)]
         public string Name { get; set; }
 
         [Column("StartTime")]

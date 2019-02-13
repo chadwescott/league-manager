@@ -33,7 +33,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         [HttpGet]
-        [SwaggerOperation(OperationId = "getPlayers", Tags = new[] { "Player" })]
+        [SwaggerOperation(OperationId = "getPlayers", Tags = new[] { Categories.Players })]
         [SwaggerResponse(200, Type = typeof(PlayerResponse[]))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
@@ -47,7 +47,7 @@ namespace LeagueManager.Api.Controllers
 
         [HttpGet]
         [Route("/api/" + Routes.Players + "/{playerId}")]
-        [SwaggerOperation(OperationId = "getPlayerById", Tags = new[] { "Player" })]
+        [SwaggerOperation(OperationId = "getPlayerById", Tags = new[] { Categories.Players })]
         [SwaggerResponse(200, Type = typeof(PlayerResponse))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
@@ -62,7 +62,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         [HttpPost]
-        [SwaggerOperation(OperationId = "createPlayer", Tags = new[] { "Player" })]
+        [SwaggerOperation(OperationId = "createPlayer", Tags = new[] { Categories.Players })]
         [SwaggerResponse(200, Type = typeof(PlayerResponse))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
@@ -76,7 +76,7 @@ namespace LeagueManager.Api.Controllers
 
         [HttpPut]
         [Route("/api/" + Routes.Players + "/{playerId}")]
-        [SwaggerOperation(OperationId = "updatePlayer", Tags = new[] { "Player" })]
+        [SwaggerOperation(OperationId = "updatePlayer", Tags = new[] { Categories.Players })]
         [SwaggerResponse(200, Type = typeof(PlayerResponse))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]

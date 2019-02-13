@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using LeagueManager.DataAccess.Context;
 using LeagueManager.DataAccess.Repository;
 
@@ -20,6 +21,5 @@ namespace LeagueManager.DataAccess.QueryCommands
         }
 
         protected abstract TReturn Execute(IRepository<TEntity> repository, List<string> includes = null);
-
     }
 }

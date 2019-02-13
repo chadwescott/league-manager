@@ -1,12 +1,13 @@
 ﻿
+
 CREATE VIEW [dbo].[Leaderboard_V]
 AS
 SELECT        TOP (100) PERCENT dbo.Players.FirstName, dbo.Players.LastName, dbo.Players.Nickname, SUM(dbo.Teams.Wins) + SUM(dbo.Teams.Losses) AS GamesPlayed, SUM(dbo.Teams.Wins) AS Wins, SUM(dbo.Teams.Losses) AS Losses, (SUM(dbo.Teams.Wins) * 1.0) / (SUM(dbo.Teams.Wins) 
                          + SUM(dbo.Teams.Losses)) * 100 AS WinPct
 FROM            dbo.Events INNER JOIN
                          dbo.Teams ON dbo.Events.Id = dbo.Teams.EventId INNER JOIN
-                         dbo.TeamPlayers ON dbo.Teams.Id = dbo.TeamPlayers.TeamId INNER JOIN
-                         dbo.Players ON dbo.TeamPlayers.PlayerId = dbo.Players.Id
+                         dbo.TeamPlayerXref ON dbo.Teams.Id = dbo.TeamPlayerXref.TeamId INNER JOIN
+                         dbo.Players ON dbo.TeamPlayerXref.PlayerId = dbo.Players.Id
 GROUP BY dbo.Players.FirstName, dbo.Players.LastName, dbo.Players.Nickname
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'Leaderboard_V';

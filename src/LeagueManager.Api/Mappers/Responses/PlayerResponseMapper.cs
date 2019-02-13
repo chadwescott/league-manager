@@ -8,6 +8,9 @@ namespace LeagueManager.Api.Mappers.Responses
     {
         public static PlayerResponse ToResponse(this Player model)
         {
+            if (model == null)
+                return null;
+
             return new PlayerResponse
             {
                 Id = model.Id,
