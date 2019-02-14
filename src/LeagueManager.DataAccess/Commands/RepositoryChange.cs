@@ -7,7 +7,7 @@ namespace LeagueManager.DataAccess.Commands
 {
     public abstract class RepositoryChange<T>: RepositoryCommand where T : class, IHasId
     {
-        protected readonly IRepositoryFactory<T> RepositoryFactory = new WritableRepositoryFactory<T>();
+        protected readonly IRepositoryFactory<T> RepositoryFactory = new RepositoryFactory<T>();
 
         protected RepositoryChange(IContextFactory<IDbContext> contextFactory)
             : base(contextFactory)

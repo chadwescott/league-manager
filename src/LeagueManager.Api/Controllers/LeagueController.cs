@@ -1,5 +1,11 @@
 ﻿using System;
+using System.Linq;
 
+using LeagueManager.Api.Mappers.Requests;
+using LeagueManager.Api.Mappers.Responses;
+using LeagueManager.Business.Commands;
+using LeagueManager.Business.Models;
+using LeagueManager.Domain.Requests;
 using LeagueManager.Domain.Responses;
 
 using Microsoft.AspNetCore.Mvc;
@@ -12,38 +18,77 @@ namespace LeagueManager.Api.Controllers
     [Route("/api/" + Routes.Leagues)]
     public class LeagueController : BaseController
     {
-        //private readonly IGetAllLeagues _getAllLeagues;
+        private readonly IGetAllModels<League> _getAllLeagues;
+        private readonly IGetModelById<League> _getLeagueById;
+        private readonly ISaveModel<League> _saveLeague;
 
-        //public LeagueController(IGetAllLeagues getAllLeagues)
-        //{
-        //    _getAllLeagues = getAllLeagues;
-        //}
+        public LeagueController(
+            IGetAllModels<League> getAllLeagues,
+            IGetModelById<League> getLeagueById,
+            ISaveModel<League> saveLeague)
+        {
+            _getAllLeagues = getAllLeagues;
+            _getLeagueById = getLeagueById;
+            _saveLeague = saveLeague;
+        }
 
-        /// <summary>
-        /// Gets the user with the specified pin.
-        /// </summary>
-        /// <returns></returns>
         [HttpGet]
-        [SwaggerOperation(OperationId = "getLeagues", Tags = new[] { "Leagues" })]
+        [SwaggerOperation(OperationId = "getLeagues", Tags = new[] { Categories.Leagues })]
         [SwaggerResponse(200, Type = typeof(LeagueResponse[]))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
         public ActionResult<LeagueResponse[]> Get()
         {
-            //var leagues = _getAllLeagues.Execute();
-            //var response = leagues.Select(x => x.ToResponse()).ToArray();
-            //return new OkObjectResult(response);
-            // TODO: Wire up to back end
-            var leagues = new LeagueResponse[]
-            {
-                new LeagueResponse
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Perinton Community Center Morning Basketball League"
-                }
-            };
-            return new OkObjectResult(leagues);
+            var Leagues = _getAllLeagues.Execute();
+            var response = Leagues.Select(x => x.ToResponse()).ToArray();
+            return new OkObjectResult(response);
+        }
+
+        [HttpGet]
+        [Route("/api/" + Routes.Leagues + "/{LeagueId}")]
+        [SwaggerOperation(OperationId = "getLeagueById", Tags = new[] { Categories.Leagues })]
+        [SwaggerResponse(200, Type = typeof(LeagueResponse))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
+        public ActionResult<LeagueResponse> Get([FromRoute] Guid LeagueId)
+        {
+            var League = _getLeagueById.Execute(LeagueId);
+            if (League == null)
+                return new NotFoundResult();
+
+            return new OkObjectResult(League.ToResponse());
+        }
+
+        [HttpPost]
+        [SwaggerOperation(OperationId = "createLeague", Tags = new[] { Categories.Leagues })]
+        [SwaggerResponse(200, Type = typeof(LeagueResponse))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
+        public ActionResult<LeagueResponse> Post(LeagueRequest request)
+        {
+            var League = _saveLeague.Execute(request.ToLeague());
+            var response = League.ToResponse();
+            return new OkObjectResult(response);
+        }
+
+        [HttpPut]
+        [Route("/api/" + Routes.Leagues + "/{LeagueId}")]
+        [SwaggerOperation(OperationId = "updateLeague", Tags = new[] { Categories.Leagues })]
+        [SwaggerResponse(200, Type = typeof(LeagueResponse))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
+        public ActionResult<LeagueResponse> Put([FromRoute] Guid LeagueId, LeagueRequest request)
+        {
+            var League = request.ToLeague();
+            League.Id = LeagueId;
+
+            League = _saveLeague.Execute(League);
+            var response = League.ToResponse();
+            return new OkObjectResult(response);
         }
     }
 }

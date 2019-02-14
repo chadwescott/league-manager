@@ -9,7 +9,6 @@ namespace LeagueManager.Api.Mappers.Requests
         {
             return new Season
             {
-                Id = request.Id,
                 LeagueId = request.LeagueId,
                 Name = request.Name,
                 SortOrder = request.SortOrder

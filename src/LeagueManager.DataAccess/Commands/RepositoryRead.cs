@@ -8,7 +8,7 @@ namespace LeagueManager.DataAccess.Commands
     public abstract class RepositoryRead<TD, TR> : RepositoryCommand
         where TD : class
     {
-        protected readonly IRepositoryFactory<TD> RepositoryFactory = new ReadOnlyRepositoryFactory<TD>();
+        protected readonly IRepositoryFactory<TD> RepositoryFactory = new RepositoryFactory<TD>();
 
         protected RepositoryRead(IContextFactory<IDbContext> contextFactory)
             : base (contextFactory)

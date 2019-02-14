@@ -9,7 +9,6 @@ namespace LeagueManager.Api.Mappers.Requests
         {
             return new Event
             {
-                Id = request.Id,
                 Name = request.Name,
                 SeasonId = request.SeasonId,
                 StartTime = request.StartTime

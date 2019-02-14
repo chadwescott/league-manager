@@ -15,11 +15,11 @@ namespace LeagueManager.DataAccess.Repository
 
         void Delete(T entity);
 
-        IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate, List<String> includes = null);
+        IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate, List<string> includes = null);
 
-        IQueryable<T> GetAll();
+        IQueryable<T> GetAll(List<string> includes = null);
 
-        T GetById<K>(K id);
+        T GetById<K>(K id, List<string> includes = null);
 
         bool IsReadOnly { get; }
     }

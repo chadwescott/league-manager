@@ -2,11 +2,11 @@
 
 namespace LeagueManager.DataAccess.Repository
 {
-    public class ReadOnlyRepositoryFactory<T> : IRepositoryFactory<T> where T : class
+    public class RepositoryFactory<T> : IRepositoryFactory<T> where T: class
     {
         public IRepository<T> CreateRepository(IDbContext context)
         {
-            return new ReadOnlyRepository<T>(context);
+            return new Repository<T>(context);
         }
     }
 }

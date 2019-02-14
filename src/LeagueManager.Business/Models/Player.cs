@@ -1,6 +1,6 @@
 ﻿using System;
 
-using LeagueManager.DataAccess;
+using LeagueManager.Database.Models;
 
 namespace LeagueManager.Business.Models
 {

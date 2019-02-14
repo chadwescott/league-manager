@@ -1,5 +1,4 @@
-﻿using LeagueManager.DataAccess.Context;
-using LeagueManager.Database.Commands;
+﻿using LeagueManager.Database.Commands;
 using LeagueManager.Database.Commands.Impl;
 using LeagueManager.Database.Models;
 
@@ -16,19 +15,25 @@ namespace LeagueManager.Database
             configuration.Bind("Database", settings);
             services.AddSingleton(settings);
 
-            services.AddSingleton<IContextFactory<IDbContext>>(x => new ContextFactory<ILeagueManagerContext>(settings.ConnectionString, -1));
+            services.AddSingleton<IContextFactory>(x => new ContextFactory(settings.ConnectionString));
 
-            services.AddSingleton<IGetAllResourcesSqlCommand<EventResource>, GetAllEventsSqlCommand>();
-            services.AddTransient<IGetByIdSqlCommand<EventResource>, GetByIdSqlCommand<EventResource>>();
+            services.AddSingleton<IGetSqlCommand<EventResource>, GetSqlCommand<EventResource>>();
             services.AddSingleton<ISaveSqlCommand<EventResource>, SaveSqlCommand<EventResource>>();
 
-            services.AddSingleton<IGetAllResourcesSqlCommand<PlayerResource>, GetAllPlayersSqlCommand>();
-            services.AddTransient<IGetByIdSqlCommand<PlayerResource>, GetByIdSqlCommand<PlayerResource>>();
+            services.AddSingleton<IGetSqlCommand<LeagueResource>, GetSqlCommand<LeagueResource>>();
+            services.AddSingleton<ISaveSqlCommand<LeagueResource>, SaveSqlCommand<LeagueResource>>();
+
+            services.AddSingleton<IGetSqlCommand<PlayerResource>, GetSqlCommand<PlayerResource>>();
             services.AddSingleton<ISaveSqlCommand<PlayerResource>, SaveSqlCommand<PlayerResource>>();
 
-            services.AddSingleton<IGetAllResourcesSqlCommand<SeasonResource>, GetAllResourcesSqlCommand<SeasonResource>>();
-            services.AddTransient<IGetByIdSqlCommand<SeasonResource>, GetByIdSqlCommand<SeasonResource>>();
+            services.AddSingleton<IGetSqlCommand<SeasonResource>, GetSqlCommand<SeasonResource>>();
             services.AddSingleton<ISaveSqlCommand<SeasonResource>, SaveSqlCommand<SeasonResource>>();
+
+            services.AddSingleton<IGetSqlCommand<TeamPlayerXrefResource>, GetSqlCommand<TeamPlayerXrefResource>>();
+            services.AddSingleton<ISaveSqlCommand<TeamPlayerXrefResource>, SaveSqlCommand<TeamPlayerXrefResource>>();
+
+            services.AddSingleton<IGetSqlCommand<TeamResource>, GetSqlCommand<TeamResource>>();
+            services.AddSingleton<ISaveSqlCommand<TeamResource>, SaveSqlCommand<TeamResource>>();
         }
     }
 }

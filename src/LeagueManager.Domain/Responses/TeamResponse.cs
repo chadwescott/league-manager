@@ -21,7 +21,7 @@ namespace LeagueManager.Domain.Responses
         [JsonProperty("losses")]
         public int Losses { get; set; }
 
-        [JsonProperty("players")]
-        public PlayerResponse[] Players { get; set; }
+        [JsonProperty("links")]
+        public LinkResponse[] Links { get; set; }
     }
 }

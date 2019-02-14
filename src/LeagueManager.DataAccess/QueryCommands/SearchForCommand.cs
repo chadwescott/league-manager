@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+
 using LeagueManager.DataAccess.Repository;
 
 namespace LeagueManager.DataAccess.QueryCommands
@@ -15,10 +14,7 @@ namespace LeagueManager.DataAccess.QueryCommands
         public SearchForCommand(IRepositoryFactory<TEntity> factory, Expression<Func<TEntity, bool>> wherePredicate)
             : base(factory)
         {
-            if (wherePredicate == null)
-                throw new ArgumentNullException("wherePredicate");
-
-            WherePredicate = wherePredicate;
+            WherePredicate = wherePredicate ?? throw new ArgumentNullException("wherePredicate");
         }
 
         protected override IEnumerable<TEntity> Execute(IRepository<TEntity> repository, List<string> includes = null)

@@ -11,7 +11,7 @@ namespace LeagueManager.DataAccess.QueryCommands
 
         protected override IEnumerable<TEntity> Execute(IRepository<TEntity> repository, List<string> includes = null)
         {
-            return repository.GetAll();
+            return repository.GetAll(includes);
         }
     }
 }

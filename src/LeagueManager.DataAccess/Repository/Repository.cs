@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+
 using LeagueManager.DataAccess.Context;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace LeagueManager.DataAccess.Repository
@@ -50,7 +53,7 @@ namespace LeagueManager.DataAccess.Repository
             Context.SetEntityState(entity, state);
         }
 
-        public virtual IQueryable<T> SearchFor(System.Linq.Expressions.Expression<Func<T, bool>> predicate, List<String> includes = null)
+        public virtual IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate, List<string> includes = null)
         {
             var queryable = DbSet.AsQueryable();
 
@@ -60,13 +63,21 @@ namespace LeagueManager.DataAccess.Repository
             return queryable.Where(predicate);
         }
 
-        public virtual IQueryable<T> GetAll()
+        public virtual IQueryable<T> GetAll(List<string> includes = null)
         {
-            return DbSet.AsQueryable<T>();
+            var queryable = DbSet.AsQueryable();
+
+            if (includes != null)
+                includes.ForEach(inc => queryable.Include(inc));
+
+            return queryable;
         }
 
-        public virtual T GetById<K>(K id) 
+        public virtual T GetById<K>(K id, List<string> includes = null) 
         {
+            if (includes != null)
+                includes.ForEach(inc => DbSet.Include(inc));
+
             return DbSet.Find(id);
         }
     }

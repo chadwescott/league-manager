@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Linq;
 
 using LeagueManager.Business.Mappers;
-using LeagueManager.DataAccess;
 using LeagueManager.Database.Commands;
+using LeagueManager.Database.Models;
 
 namespace LeagueManager.Business.Commands.Impl
 {
@@ -11,13 +12,13 @@ namespace LeagueManager.Business.Commands.Impl
         where TR : class, IHasId
     {
         private readonly IResourceMapper<TM, TR> _mapper;
-        private readonly IGetByIdSqlCommand<TR> _getByIdCommand;
+        private readonly IGetSqlCommand<TR> _getCommand;
         private readonly ISaveSqlCommand<TR> _saveCommand;
 
-        public SaveModel(IResourceMapper<TM, TR> mapper, IGetByIdSqlCommand<TR> getByIdCommand, ISaveSqlCommand<TR> saveCommand)
+        public SaveModel(IResourceMapper<TM, TR> mapper, IGetSqlCommand<TR> getCommand, ISaveSqlCommand<TR> saveCommand)
         {
             _mapper = mapper;
-            _getByIdCommand = getByIdCommand;
+            _getCommand = getCommand;
             _saveCommand = saveCommand;
         }
 
@@ -25,7 +26,7 @@ namespace LeagueManager.Business.Commands.Impl
         {
             var resource = _mapper.ToResource(model);
 
-            if (model.Id != Guid.Empty && _getByIdCommand.Execute(model.Id) == null)
+            if (model.Id != Guid.Empty && _getCommand.Execute(x => x.Where(y => y.Id == model.Id)) == null)
                 throw new ArgumentException("Id provided is invalid", model.Id.ToString());
 
             _saveCommand.Execute(resource);
