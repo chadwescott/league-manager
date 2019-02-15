@@ -15,24 +15,30 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace LeagueManager.Api.Controllers
 {
     [ApiController]
-    [Route("/api/" + Routes.Teams)]
+    [Route(Routes.Teams)]
     public class TeamController : BaseController
     {
-        private readonly IGetAllModels<Team> _getAllTeams;
+        private readonly IGetModels<Team> _getAllTeams;
         private readonly IGetModelById<Team> _getTeamById;
         private readonly IGetPlayersByTeam _getPlayersByTeam;
         private readonly ISaveModel<Team> _saveTeam;
+        private readonly ISaveModel<TeamPlayer> _saveTeamPlayer;
+        private readonly IDeleteModel<TeamPlayer> _deleteTeamPlayer;
 
         public TeamController(
-            IGetAllModels<Team> getAllTeams,
+            IGetModels<Team> getAllTeams,
             IGetModelById<Team> getTeamById,
             IGetPlayersByTeam getPlayersByTeam,
-            ISaveModel<Team> saveTeam)
+            ISaveModel<Team> saveTeam,
+            ISaveModel<TeamPlayer> saveTeamPlayer,
+            IDeleteModel<TeamPlayer> deleteTeamPlayer)
         {
             _getAllTeams = getAllTeams;
             _getTeamById = getTeamById;
             _getPlayersByTeam = getPlayersByTeam;
             _saveTeam = saveTeam;
+            _saveTeamPlayer = saveTeamPlayer;
+            _deleteTeamPlayer = deleteTeamPlayer;
         }
 
         [HttpGet]
@@ -49,7 +55,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         [HttpGet]
-        [Route("/api/" + Routes.Teams + "/{teamId}")]
+        [Route(Routes.Teams + "/{teamId}")]
         [SwaggerOperation(OperationId = "getTeamById", Tags = new[] { Categories.Teams })]
         [SwaggerResponse(200, Type = typeof(TeamResponse))]
         [SwaggerResponse(400)]
@@ -65,7 +71,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         [HttpGet]
-        [Route("/api/" + Routes.Teams + "/{teamId}/" + Routes.Players)]
+        [Route(Routes.Teams + "/{teamId}/" + Routes.Players)]
         [SwaggerOperation(OperationId = "getTeamPlayers", Tags = new[] { Categories.Teams })]
         [SwaggerResponse(200, Type = typeof(PlayerResponse[]))]
         [SwaggerResponse(400)]
@@ -76,6 +82,20 @@ namespace LeagueManager.Api.Controllers
             var players = _getPlayersByTeam.Execute(teamId);
             var response = players.Select(x => x.ToResponse()).ToArray();
             return new OkObjectResult(response);
+        }
+
+        [HttpPost]
+        [Route(Routes.Teams + "/{teamId}/" + Routes.Players + "/{playerId}")]
+        [SwaggerOperation(OperationId = "addTeamPlayer", Tags = new[] { Categories.Teams })]
+        [SwaggerResponse(200, Type = typeof(PlayerResponse[]))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
+        public ActionResult<PlayerResponse[]> AddTeamPlayer([FromRoute] Guid teamId, [FromRoute] Guid playerId)
+        {
+            var teamPlayer = new TeamPlayer { TeamId = teamId, PlayerId = playerId };
+            _saveTeamPlayer.Execute(teamPlayer);
+            return GetTeamPlayers(teamId);
         }
 
         [HttpPost]
@@ -92,7 +112,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         [HttpPut]
-        [Route("/api/" + Routes.Teams + "/{TeamId}")]
+        [Route(Routes.Teams + "/{TeamId}")]
         [SwaggerOperation(OperationId = "updateTeam", Tags = new[] { Categories.Teams })]
         [SwaggerResponse(200, Type = typeof(TeamResponse))]
         [SwaggerResponse(400)]
@@ -106,6 +126,20 @@ namespace LeagueManager.Api.Controllers
             team = _saveTeam.Execute(team);
             var response = team.ToResponse();
             return new OkObjectResult(response);
+        }
+
+        [HttpDelete]
+        [Route(Routes.Teams + "/{teamId}/" + Routes.Players + "/{playerId}")]
+        [SwaggerOperation(OperationId = "deleteTeamPlayer", Tags = new[] { Categories.Teams })]
+        [SwaggerResponse(200, Type = typeof(PlayerResponse[]))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
+        public ActionResult<PlayerResponse[]> DeleteTeamPlayer([FromRoute] Guid teamId, [FromRoute] Guid playerId)
+        {
+            var teamPlayer = new TeamPlayer { TeamId = teamId, PlayerId = playerId };
+            _deleteTeamPlayer.Execute(teamPlayer);
+            return GetTeamPlayers(teamId);
         }
     }
 }

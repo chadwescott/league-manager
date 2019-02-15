@@ -15,15 +15,15 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace LeagueManager.Api.Controllers
 {
     [ApiController]
-    [Route("/api/" + Routes.Players)]
+    [Route(Routes.Players)]
     public class PlayerController : BaseController
     {
-        private readonly IGetAllModels<Player> _getAllPlayers;
+        private readonly IGetModels<Player> _getAllPlayers;
         private readonly IGetModelById<Player> _getPlayerById;
         private readonly ISaveModel<Player> _savePlayer;
 
         public PlayerController(
-            IGetAllModels<Player> getAllPlayers,
+            IGetModels<Player> getAllPlayers,
             IGetModelById<Player> getPlayerById,
             ISaveModel<Player> savePlayer)
         {
@@ -46,7 +46,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         [HttpGet]
-        [Route("/api/" + Routes.Players + "/{playerId}")]
+        [Route(Routes.Players + "/{playerId}")]
         [SwaggerOperation(OperationId = "getPlayerById", Tags = new[] { Categories.Players })]
         [SwaggerResponse(200, Type = typeof(PlayerResponse))]
         [SwaggerResponse(400)]
@@ -75,7 +75,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         [HttpPut]
-        [Route("/api/" + Routes.Players + "/{playerId}")]
+        [Route(Routes.Players + "/{playerId}")]
         [SwaggerOperation(OperationId = "updatePlayer", Tags = new[] { Categories.Players })]
         [SwaggerResponse(200, Type = typeof(PlayerResponse))]
         [SwaggerResponse(400)]

@@ -31,6 +31,7 @@ namespace LeagueManager.Database
 
             services.AddSingleton<IGetSqlCommand<TeamPlayerXrefResource>, GetSqlCommand<TeamPlayerXrefResource>>();
             services.AddSingleton<ISaveSqlCommand<TeamPlayerXrefResource>, SaveSqlCommand<TeamPlayerXrefResource>>();
+            services.AddSingleton<IDeleteSqlCommand<TeamPlayerXrefResource>, DeleteSqlCommand<TeamPlayerXrefResource>>();
 
             services.AddSingleton<IGetSqlCommand<TeamResource>, GetSqlCommand<TeamResource>>();
             services.AddSingleton<ISaveSqlCommand<TeamResource>, SaveSqlCommand<TeamResource>>();

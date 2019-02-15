@@ -10,9 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LeagueManager.Business.Commands.Impl
 {
-    internal class GetAllEvents : GetAllModels<Event, EventResource>, IGetAllModels<Event>
+    internal class GetEvents : GetModels<Event, EventResource>, IGetModels<Event>
     {
-        public GetAllEvents(IResourceMapper<Event, EventResource> mapper, IGetSqlCommand<EventResource> sqlCommand)
+        public GetEvents(IResourceMapper<Event, EventResource> mapper, IGetSqlCommand<EventResource> sqlCommand)
             : base(mapper, sqlCommand)
         { }
 

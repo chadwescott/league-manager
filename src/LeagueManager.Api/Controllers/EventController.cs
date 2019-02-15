@@ -15,16 +15,16 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace LeagueManager.Api.Controllers
 {
     [ApiController]
-    [Route("/api/" + Routes.Events)]
+    [Route(Routes.Events)]
     public class EventController : BaseController
     {
-        private readonly IGetAllModels<Event> _getAllEvents;
+        private readonly IGetModels<Event> _getAllEvents;
         private readonly IGetModelById<Event> _getEventById;
         private readonly IGetTeamsByEvent _getTeamsByEvent;
         private readonly ISaveModel<Event> _saveEvent;
 
         public EventController(
-            IGetAllModels<Event> getAllEvents,
+            IGetModels<Event> getAllEvents,
             IGetModelById<Event> getEventById,
             IGetTeamsByEvent getTeamsByEvent,
             ISaveModel<Event> saveEvent)
@@ -53,7 +53,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         [HttpGet]
-        [Route("/api/" + Routes.Events + "/{eventId}")]
+        [Route(Routes.Events + "/{eventId}")]
         [SwaggerOperation(OperationId = "getEventById", Tags = new[] { Categories.Events })]
         [SwaggerResponse(200, Type = typeof(EventResponse))]
         [SwaggerResponse(400)]
@@ -69,7 +69,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         [HttpGet]
-        [Route("/api/" + Routes.Events + "/{eventId}/teams")]
+        [Route(Routes.Events + "/{eventId}/teams")]
         [SwaggerOperation(OperationId = "getTeamsByEventId", Tags = new[] { Categories.Events })]
         [SwaggerResponse(200, Type = typeof(TeamResponse[]))]
         [SwaggerResponse(400)]
@@ -98,7 +98,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         [HttpPut]
-        [Route("/api/" + Routes.Events + "/{eventId}")]
+        [Route(Routes.Events + "/{eventId}")]
         [SwaggerOperation(OperationId = "updateEvent", Tags = new[] { Categories.Events })]
         [SwaggerResponse(200, Type = typeof(EventResponse))]
         [SwaggerResponse(400)]

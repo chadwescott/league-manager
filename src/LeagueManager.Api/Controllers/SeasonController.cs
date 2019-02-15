@@ -15,15 +15,15 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace LeagueManager.Api.Controllers
 {
     [ApiController]
-    [Route("/api/" + Routes.Seasons)]
+    [Route(Routes.Seasons)]
     public class SeasonController : BaseController
     {
-        private readonly IGetAllModels<Season> _getAllSeasons;
+        private readonly IGetModels<Season> _getAllSeasons;
         private readonly IGetModelById<Season> _getSeasonById;
         private readonly ISaveModel<Season> _saveSeason;
 
         public SeasonController(
-            IGetAllModels<Season> getAllSeasons,
+            IGetModels<Season> getAllSeasons,
             IGetModelById<Season> getSeasonById,
             ISaveModel<Season> saveSeason)
         {
@@ -46,7 +46,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         [HttpGet]
-        [Route("/api/" + Routes.Seasons + "/{SeasonId}")]
+        [Route(Routes.Seasons + "/{SeasonId}")]
         [SwaggerOperation(OperationId = "getSeasonById", Tags = new[] { Categories.Seasons })]
         [SwaggerResponse(200, Type = typeof(SeasonResponse))]
         [SwaggerResponse(400)]
@@ -75,7 +75,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         [HttpPut]
-        [Route("/api/" + Routes.Seasons + "/{SeasonId}")]
+        [Route(Routes.Seasons + "/{SeasonId}")]
         [SwaggerOperation(OperationId = "updateSeason", Tags = new[] { Categories.Seasons })]
         [SwaggerResponse(200, Type = typeof(SeasonResponse))]
         [SwaggerResponse(400)]

@@ -10,9 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LeagueManager.Business.Commands.Impl
 {
-    internal class GetAllPlayers : GetAllModels<Player, PlayerResource>, IGetAllModels<Player>
+    internal class GetPlayers : GetModels<Player, PlayerResource>, IGetModels<Player>
     {
-        public GetAllPlayers(IResourceMapper<Player, PlayerResource> mapper, IGetSqlCommand<PlayerResource> sqlCommand)
+        public GetPlayers(IResourceMapper<Player, PlayerResource> mapper, IGetSqlCommand<PlayerResource> sqlCommand)
             : base(mapper, sqlCommand)
         { }
 

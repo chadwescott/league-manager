@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using LeagueManager.Business.Exceptions;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
@@ -30,6 +32,10 @@ namespace LeagueManager.Api
                 if (ex is ArgumentException || ex is ArgumentNullException)
                 {
                     httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                }
+                else if (ex is ModelNotFoundException)
+                {
+                    httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
                 }
                 else
                 {

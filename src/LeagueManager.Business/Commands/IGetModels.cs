@@ -1,6 +1,6 @@
 ﻿namespace LeagueManager.Business.Commands
 {
-    public interface IGetAllModels<T>
+    public interface IGetModels<T>
     {
         T[] Execute();
     }
