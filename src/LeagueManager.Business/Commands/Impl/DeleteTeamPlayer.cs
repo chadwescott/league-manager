@@ -1,5 +1,6 @@
-﻿using LeagueManager.Business.Exceptions;
-using LeagueManager.Business.Mappers;
+﻿using AutoMapper;
+
+using LeagueManager.Business.Exceptions;
 using LeagueManager.Business.Models;
 using LeagueManager.Database.Commands;
 using LeagueManager.Database.Models;
@@ -10,16 +11,14 @@ namespace LeagueManager.Business.Commands.Impl
     {
         private readonly IGetTeamPlayerByTeamIdAndPlayerId _getTeamPlayers;
         private readonly IDeleteSqlCommand<TeamPlayerXrefResource> _deleteTeamPlayer;
-        private readonly IResourceMapper<TeamPlayer, TeamPlayerXrefResource> _mapper;
 
         public DeleteTeamPlayer(
             IGetTeamPlayerByTeamIdAndPlayerId getTeamPlayers,
             IDeleteSqlCommand<TeamPlayerXrefResource> deleteTeamPlayer,
-            IResourceMapper<TeamPlayer, TeamPlayerXrefResource> mapper)
+            IMapper mapper)
         {
             _getTeamPlayers = getTeamPlayers;
             _deleteTeamPlayer = deleteTeamPlayer;
-            _mapper = mapper;
         }
 
         public void Execute(TeamPlayer model)
@@ -28,7 +27,7 @@ namespace LeagueManager.Business.Commands.Impl
             if (teamPlayer == null)
                 throw new ModelNotFoundException($"No team player exists with TeamId: {model.TeamId} and PlayerId: {model.PlayerId}");
 
-            _deleteTeamPlayer.Execute(_mapper.ToResource(teamPlayer));
+            _deleteTeamPlayer.Execute(Mapper.Map<TeamPlayerXrefResource>(teamPlayer));
         }
     }
 }

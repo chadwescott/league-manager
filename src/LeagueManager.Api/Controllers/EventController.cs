@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 
-using LeagueManager.Api.Mappers.Requests;
-using LeagueManager.Api.Mappers.Responses;
+using AutoMapper;
+
 using LeagueManager.Business.Commands;
 using LeagueManager.Business.Models;
 using LeagueManager.Domain.Requests;
@@ -24,10 +24,12 @@ namespace LeagueManager.Api.Controllers
         private readonly ISaveModel<Event> _saveEvent;
 
         public EventController(
+            IMapper mapper,
             IGetModels<Event> getAllEvents,
             IGetModelById<Event> getEventById,
             IGetTeamsByEvent getTeamsByEvent,
             ISaveModel<Event> saveEvent)
+            : base(mapper)
         {
             _getAllEvents = getAllEvents;
             _getEventById = getEventById;
@@ -36,7 +38,7 @@ namespace LeagueManager.Api.Controllers
         }
 
         /// <summary>
-        /// Gets the user with the specified pin.
+        /// Returns all the events.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -45,13 +47,18 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<EventResponse[]> Get()
+        public ActionResult<EventResponse[]> GetAllEvents()
         {
             var events = _getAllEvents.Execute();
-            var response = events.Select(x => x.ToResponse()).ToArray();
+            var response = events.Select(x => Mapper.Map<EventResponse>(x)).ToArray();
             return new OkObjectResult(response);
         }
 
+        /// <summary>
+        /// Returns the event with the event id provided.
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route(Routes.Events + "/{eventId}")]
         [SwaggerOperation(OperationId = "getEventById", Tags = new[] { Categories.Events })]
@@ -59,15 +66,20 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<EventResponse> Get([FromRoute] Guid eventId)
+        public ActionResult<EventResponse> GetEventById([FromRoute] Guid eventId)
         {
             var model = _getEventById.Execute(eventId);
             if (model == null)
                 return new NotFoundResult();
 
-            return new OkObjectResult(model.ToResponse());
+            return new OkObjectResult(Mapper.Map<EventResponse>(model));
         }
 
+        /// <summary>
+        /// Returns the teams participating in the event with the event id provided.
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route(Routes.Events + "/{eventId}/teams")]
         [SwaggerOperation(OperationId = "getTeamsByEventId", Tags = new[] { Categories.Events })]
@@ -81,22 +93,33 @@ namespace LeagueManager.Api.Controllers
             if (model == null)
                 return new NotFoundResult();
 
-            return new OkObjectResult(model.Select(x => x.ToResponse()).ToArray());
+            return new OkObjectResult(model.Select(x => Mapper.Map<TeamResponse>(x)));
         }
 
+        /// <summary>
+        /// Creates a new event.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [SwaggerOperation(OperationId = "createEvent", Tags = new[] { Categories.Events })]
         [SwaggerResponse(200, Type = typeof(EventResponse))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<EventResponse> Post(EventRequest request)
+        public ActionResult<EventResponse> CreateEvent(EventRequest request)
         {
-            var model = _saveEvent.Execute(request.ToEvent());
-            var response = model.ToResponse();
+            var model = _saveEvent.Execute(Mapper.Map<Event>(request));
+            var response = Mapper.Map<EventResponse>(model);
             return new OkObjectResult(response);
         }
 
+        /// <summary>
+        /// Updates the event with the event id provided.
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route(Routes.Events + "/{eventId}")]
         [SwaggerOperation(OperationId = "updateEvent", Tags = new[] { Categories.Events })]
@@ -104,13 +127,13 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<EventResponse> Put([FromRoute] Guid eventId, EventRequest request)
+        public ActionResult<EventResponse> UpdateEvent([FromRoute] Guid eventId, EventRequest request)
         {
-            var model = request.ToEvent();
+            var model = Mapper.Map<Event>(request);
             model.Id = eventId;
 
             model = _saveEvent.Execute(model);
-            var response = model.ToResponse();
+            var response = Mapper.Map<EventResponse>(model);
             return new OkObjectResult(response);
         }
     }

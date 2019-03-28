@@ -1,28 +1,39 @@
-﻿using LeagueManager.Business.Commands;
+﻿using AutoMapper.Configuration;
+
+using LeagueManager.Business.Commands;
 using LeagueManager.Business.Commands.Impl;
-using LeagueManager.Business.Mappers;
 using LeagueManager.Business.Models;
 using LeagueManager.Database;
 using LeagueManager.Database.Models;
 
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace LeagueManager.Business
 {
     public static class BusinessStartup
     {
-        public static void ConfigureBusinessServices(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureBusinessServices(
+            this IServiceCollection services,
+            IConfiguration configuration,
+            MapperConfigurationExpression mapperConfiguration)
         {
             services.ConfigureDatabaseServices(configuration);
 
-            // Mapper registration
-            services.AddTransient<IResourceMapper<Event, EventResource>, EventMapper>();
-            services.AddTransient<IResourceMapper<League, LeagueResource>, LeagueMapper>();
-            services.AddTransient<IResourceMapper<Player, PlayerResource>, PlayerMapper>();
-            services.AddTransient<IResourceMapper<Season, SeasonResource>, SeasonMapper>();
-            services.AddTransient<IResourceMapper<Team, TeamResource>, TeamMapper>();
-            services.AddTransient<IResourceMapper<TeamPlayer, TeamPlayerXrefResource>, TeamPlayerMapper>();
+            // AutoMapper configuration
+            mapperConfiguration.CreateMap<Event, EventResource>();
+            mapperConfiguration.CreateMap<EventResource, Event>();
+            mapperConfiguration.CreateMap<League, LeagueResource>();
+            mapperConfiguration.CreateMap<LeagueResource, League>();
+            mapperConfiguration.CreateMap<Player, PlayerResource>();
+            mapperConfiguration.CreateMap<PlayerResource, Player>();
+            mapperConfiguration.CreateMap<Season, SeasonResource>();
+            mapperConfiguration.CreateMap<SeasonResource, Season>();
+            mapperConfiguration.CreateMap<Team, TeamResource>();
+            mapperConfiguration.CreateMap<TeamResource, Team>();
+            mapperConfiguration.CreateMap<TeamPlayer, TeamPlayerXrefResource>();
+            mapperConfiguration.CreateMap<TeamPlayerXrefResource, TeamPlayer>();
 
             // Delete command registration
             services.AddTransient<IDeleteModel<TeamPlayer>, DeleteTeamPlayer>();

@@ -1,12 +1,22 @@
-﻿using LeagueManager.Business;
+﻿using System;
+using System.IO;
+using System.Reflection;
 
+using AutoMapper;
+using AutoMapper.Configuration;
+using LeagueManager.Api.Mappers.Responses;
+using LeagueManager.Business;
+using LeagueManager.Business.Models;
+using LeagueManager.Domain.Requests;
+using LeagueManager.Domain.Responses;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using Swashbuckle.AspNetCore.Swagger;
+
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace LeagueManager.Api
 {
@@ -22,14 +32,30 @@ namespace LeagueManager.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureBusinessServices(Configuration);
+            // AutomMapper configuration
+            var mapperConfig = new MapperConfigurationExpression();
+            services.ConfigureBusinessServices(Configuration, mapperConfig);
+
+            mapperConfig.CreateMap<EventRequest, Event>();
+            mapperConfig.CreateMap<LeagueRequest, League>();
+            mapperConfig.CreateMap<PlayerRequest, Player>();
+            mapperConfig.CreateMap<SeasonRequest, Season>();
+            mapperConfig.CreateMap<TeamRequest, Team>();
+
+            mapperConfig.CreateMap<Event, EventResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
+            mapperConfig.CreateMap<Player, PlayerResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
+            mapperConfig.CreateMap<Season, SeasonResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
+            mapperConfig.CreateMap<Team, TeamResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
+
+            Mapper.Initialize(mapperConfig);
+            services.AddSingleton(Mapper.Instance);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc("v1", new Info
                 {
-                    Title = "League Manager REST services",
+                    Title = "My League REST services",
                     Version = "v1",
                     Description = "A REST service with commands to manage a sports league.",
                     Contact = new Contact
@@ -39,6 +65,10 @@ namespace LeagueManager.Api
                     }
                 });
                 x.EnableAnnotations();
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                x.IncludeXmlComments(xmlPath);
             });
         }
 
@@ -48,7 +78,7 @@ namespace LeagueManager.Api
             app.UseSwagger();
             app.UseSwaggerUI(x =>
             {
-                x.SwaggerEndpoint("/swagger/v1/swagger.json", "League Manager REST services");
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", "My League REST services");
                 x.RoutePrefix = string.Empty;
             });
 
