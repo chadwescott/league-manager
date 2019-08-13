@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 
-using LeagueManager.Api.Mappers.Requests;
-using LeagueManager.Api.Mappers.Responses;
+using AutoMapper;
+
 using LeagueManager.Business.Commands;
 using LeagueManager.Business.Models;
 using LeagueManager.Domain.Requests;
@@ -23,28 +23,39 @@ namespace LeagueManager.Api.Controllers
         private readonly ISaveModel<League> _saveLeague;
 
         public LeagueController(
+            IMapper mapper,
             IGetModels<League> getAllLeagues,
             IGetModelById<League> getLeagueById,
             ISaveModel<League> saveLeague)
+            : base(mapper)
         {
             _getAllLeagues = getAllLeagues;
             _getLeagueById = getLeagueById;
             _saveLeague = saveLeague;
         }
 
+        /// <summary>
+        /// Returns all the leagues.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [SwaggerOperation(OperationId = "getLeagues", Tags = new[] { Categories.Leagues })]
         [SwaggerResponse(200, Type = typeof(LeagueResponse[]))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<LeagueResponse[]> Get()
+        public ActionResult<LeagueResponse[]> GetAllLeagues()
         {
             var Leagues = _getAllLeagues.Execute();
-            var response = Leagues.Select(x => x.ToResponse()).ToArray();
+            var response = Leagues.Select(x => Mapper.Map<LeagueResponse>(x)).ToArray();
             return new OkObjectResult(response);
         }
 
+        /// <summary>
+        /// Returns the league with the league id provided.
+        /// </summary>
+        /// <param name="leagueId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route(Routes.Leagues + "/{LeagueId}")]
         [SwaggerOperation(OperationId = "getLeagueById", Tags = new[] { Categories.Leagues })]
@@ -52,28 +63,39 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<LeagueResponse> Get([FromRoute] Guid LeagueId)
+        public ActionResult<LeagueResponse> GetLeagueById([FromRoute] Guid leagueId)
         {
-            var League = _getLeagueById.Execute(LeagueId);
-            if (League == null)
+            var league = _getLeagueById.Execute(leagueId);
+            if (league == null)
                 return new NotFoundResult();
 
-            return new OkObjectResult(League.ToResponse());
+            return new OkObjectResult(Mapper.Map<LeagueResponse>(league));
         }
 
+        /// <summary>
+        /// Creates a new league.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [SwaggerOperation(OperationId = "createLeague", Tags = new[] { Categories.Leagues })]
         [SwaggerResponse(200, Type = typeof(LeagueResponse))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<LeagueResponse> Post(LeagueRequest request)
+        public ActionResult<LeagueResponse> CreateLeague(LeagueRequest request)
         {
-            var League = _saveLeague.Execute(request.ToLeague());
-            var response = League.ToResponse();
+            var league = _saveLeague.Execute(Mapper.Map<League>(request));
+            var response = Mapper.Map<LeagueResponse>(league);
             return new OkObjectResult(response);
         }
 
+        /// <summary>
+        /// Updates the league with the league id provided.
+        /// </summary>
+        /// <param name="LeagueId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route(Routes.Leagues + "/{LeagueId}")]
         [SwaggerOperation(OperationId = "updateLeague", Tags = new[] { Categories.Leagues })]
@@ -81,13 +103,13 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<LeagueResponse> Put([FromRoute] Guid LeagueId, LeagueRequest request)
+        public ActionResult<LeagueResponse> UpdateLeague([FromRoute] Guid LeagueId, LeagueRequest request)
         {
-            var League = request.ToLeague();
-            League.Id = LeagueId;
+            var league = Mapper.Map<League>(request);
+            league.Id = LeagueId;
 
-            League = _saveLeague.Execute(League);
-            var response = League.ToResponse();
+            league = _saveLeague.Execute(league);
+            var response = Mapper.Map<LeagueResponse>(league);
             return new OkObjectResult(response);
         }
     }

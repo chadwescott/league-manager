@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Linq;
 
-using LeagueManager.Business.Mappers;
+using AutoMapper;
+
 using LeagueManager.Business.Models;
 using LeagueManager.Database.Commands;
 using LeagueManager.Database.Models;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace LeagueManager.Business.Commands.Impl
 {
     internal class GetTeamsByEvent : IGetTeamsByEvent
     {
-        private readonly IResourceMapper<Team, TeamResource> _mapper;
+        private readonly IMapper _mapper;
         private readonly IGetSqlCommand<TeamResource> _sqlCommand;
 
         public GetTeamsByEvent(
-            IResourceMapper<Team, TeamResource> mapper,
+            IMapper mapper,
             IGetSqlCommand<TeamResource> sqlCommand)
         {
             _mapper = mapper;
@@ -28,7 +27,7 @@ namespace LeagueManager.Business.Commands.Impl
             return _sqlCommand.Execute(
                 x => x.Where(y => y.EventId == eventId))
                .OrderBy(y => y.TeamNumber)
-               .Select(x => _mapper.ToModel(x))
+               .Select(x => _mapper.Map<Team>(x))
                .ToArray();
         }
     }

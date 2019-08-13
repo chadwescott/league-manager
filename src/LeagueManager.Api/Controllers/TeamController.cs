@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 
-using LeagueManager.Api.Mappers.Requests;
-using LeagueManager.Api.Mappers.Responses;
+using AutoMapper;
+
 using LeagueManager.Business.Commands;
 using LeagueManager.Business.Models;
 using LeagueManager.Domain.Requests;
@@ -26,12 +26,14 @@ namespace LeagueManager.Api.Controllers
         private readonly IDeleteModel<TeamPlayer> _deleteTeamPlayer;
 
         public TeamController(
+            IMapper mapper,
             IGetModels<Team> getAllTeams,
             IGetModelById<Team> getTeamById,
             IGetPlayersByTeam getPlayersByTeam,
             ISaveModel<Team> saveTeam,
             ISaveModel<TeamPlayer> saveTeamPlayer,
             IDeleteModel<TeamPlayer> deleteTeamPlayer)
+            : base(mapper)
         {
             _getAllTeams = getAllTeams;
             _getTeamById = getTeamById;
@@ -41,19 +43,28 @@ namespace LeagueManager.Api.Controllers
             _deleteTeamPlayer = deleteTeamPlayer;
         }
 
+        /// <summary>
+        /// Returns all the teams.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [SwaggerOperation(OperationId = "getTeams", Tags = new[] { Categories.Teams })]
         [SwaggerResponse(200, Type = typeof(TeamResponse[]))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<TeamResponse[]> Get()
+        public ActionResult<TeamResponse[]> GetAllTeams()
         {
             var teams = _getAllTeams.Execute();
-            var response = teams.Select(x => x.ToResponse()).ToArray();
+            var response = teams.Select(x => Mapper.Map<TeamResponse>(x)).ToArray();
             return new OkObjectResult(response);
         }
 
+        /// <summary>
+        /// Returns the team with the team id provided.
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route(Routes.Teams + "/{teamId}")]
         [SwaggerOperation(OperationId = "getTeamById", Tags = new[] { Categories.Teams })]
@@ -61,15 +72,20 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<TeamResponse> Get([FromRoute] Guid teamId)
+        public ActionResult<TeamResponse> GetTeamById([FromRoute] Guid teamId)
         {
             var team = _getTeamById.Execute(teamId);
             if (team == null)
                 return new NotFoundResult();
 
-            return new OkObjectResult(team.ToResponse());
+            return new OkObjectResult(Mapper.Map<TeamResponse>(team));
         }
 
+        /// <summary>
+        /// Returns the players on the team with the team id provided.
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route(Routes.Teams + "/{teamId}/" + Routes.Players)]
         [SwaggerOperation(OperationId = "getTeamPlayers", Tags = new[] { Categories.Teams })]
@@ -80,10 +96,16 @@ namespace LeagueManager.Api.Controllers
         public ActionResult<PlayerResponse[]> GetTeamPlayers([FromRoute] Guid teamId)
         {
             var players = _getPlayersByTeam.Execute(teamId);
-            var response = players.Select(x => x.ToResponse()).ToArray();
+            var response = players.Select(x => Mapper.Map<PlayerResponse>(x)).ToArray();
             return new OkObjectResult(response);
         }
 
+        /// <summary>
+        /// Adds the player with the player id provided to the team with the team id provided.
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <param name="playerId"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route(Routes.Teams + "/{teamId}/" + Routes.Players + "/{playerId}")]
         [SwaggerOperation(OperationId = "addTeamPlayer", Tags = new[] { Categories.Teams })]
@@ -98,19 +120,30 @@ namespace LeagueManager.Api.Controllers
             return GetTeamPlayers(teamId);
         }
 
+        /// <summary>
+        /// Creates a new team.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [SwaggerOperation(OperationId = "createTeam", Tags = new[] { Categories.Teams })]
         [SwaggerResponse(200, Type = typeof(TeamResponse))]
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<TeamResponse> Post(TeamRequest request)
+        public ActionResult<TeamResponse> CreateTeam(TeamRequest request)
         {
-            var team = _saveTeam.Execute(request.ToTeam());
-            var response = team.ToResponse();
+            var team = _saveTeam.Execute(Mapper.Map<Team>(request));
+            var response = Mapper.Map<TeamResponse>(team);
             return new OkObjectResult(response);
         }
 
+        /// <summary>
+        /// Updates the team with the team id provided.
+        /// </summary>
+        /// <param name="TeamId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route(Routes.Teams + "/{TeamId}")]
         [SwaggerOperation(OperationId = "updateTeam", Tags = new[] { Categories.Teams })]
@@ -118,16 +151,22 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<TeamResponse> Put([FromRoute] Guid TeamId, TeamRequest request)
+        public ActionResult<TeamResponse> UpdateTeam([FromRoute] Guid TeamId, TeamRequest request)
         {
-            var team = request.ToTeam();
+            var team = Mapper.Map<Team>(request);
             team.EventId = TeamId;
 
             team = _saveTeam.Execute(team);
-            var response = team.ToResponse();
+            var response = Mapper.Map<TeamResponse>(team);
             return new OkObjectResult(response);
         }
 
+        /// <summary>
+        /// Removes the player with the player id provided from the team with the team id provided.
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <param name="playerId"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route(Routes.Teams + "/{teamId}/" + Routes.Players + "/{playerId}")]
         [SwaggerOperation(OperationId = "deleteTeamPlayer", Tags = new[] { Categories.Teams })]

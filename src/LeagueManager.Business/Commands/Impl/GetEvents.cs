@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
 
-using LeagueManager.Business.Mappers;
+using AutoMapper;
+
 using LeagueManager.Business.Models;
 using LeagueManager.Database.Commands;
 using LeagueManager.Database.Models;
@@ -12,7 +13,7 @@ namespace LeagueManager.Business.Commands.Impl
 {
     internal class GetEvents : GetModels<Event, EventResource>, IGetModels<Event>
     {
-        public GetEvents(IResourceMapper<Event, EventResource> mapper, IGetSqlCommand<EventResource> sqlCommand)
+        public GetEvents(IMapper mapper, IGetSqlCommand<EventResource> sqlCommand)
             : base(mapper, sqlCommand)
         { }
 

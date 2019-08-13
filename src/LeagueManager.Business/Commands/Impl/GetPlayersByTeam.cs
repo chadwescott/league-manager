@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
 
-using LeagueManager.Business.Mappers;
+using AutoMapper;
+
 using LeagueManager.Business.Models;
 using LeagueManager.Database.Commands;
 using LeagueManager.Database.Models;
@@ -12,11 +13,11 @@ namespace LeagueManager.Business.Commands.Impl
 {
     internal class GetPlayersByTeam : IGetPlayersByTeam
     {
-        private readonly IResourceMapper<Player, PlayerResource> _mapper;
+        private readonly IMapper _mapper;
         private readonly IGetSqlCommand<TeamPlayerXrefResource> _sqlCommand;
 
         public GetPlayersByTeam(
-            IResourceMapper<Player, PlayerResource> mapper,
+            IMapper mapper,
             IGetSqlCommand<TeamPlayerXrefResource> sqlCommand)
         {
             _mapper = mapper;
@@ -26,7 +27,7 @@ namespace LeagueManager.Business.Commands.Impl
         public Player[] Execute(Guid teamId)
         {
             return _sqlCommand.Execute(x => x.Include(y => y.Player).Where(y => y.TeamId == teamId))
-                .Select(x => _mapper.ToModel(x.Player)).ToArray();
+                .Select(x => _mapper.Map<Player>(x.Player)).ToArray();
         }
     }
 }
