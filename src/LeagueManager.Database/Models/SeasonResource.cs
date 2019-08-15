@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,5 +25,8 @@ namespace LeagueManager.Database.Models
 
         [Column("SortOrder")]
         public int SortOrder { get; set; }
+
+        [ForeignKey("SeasonId")]
+        public IEnumerable<SeasonTeamXrefResource> SeasonTeams { get; set; }
     }
 }

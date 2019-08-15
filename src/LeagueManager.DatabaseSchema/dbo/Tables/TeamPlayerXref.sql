@@ -2,7 +2,6 @@
     [Id]       UNIQUEIDENTIFIER CONSTRAINT [DF_TeamPlayers_Id] DEFAULT (newsequentialid()) NOT NULL,
     [TeamId]   UNIQUEIDENTIFIER NOT NULL,
     [PlayerId] UNIQUEIDENTIFIER NOT NULL,
-    [NoShow]   BIT              CONSTRAINT [DF_TeamPlayers_NoShow] DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_TeamPlayers] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_TeamPlayerXref_Players] FOREIGN KEY ([PlayerId]) REFERENCES [dbo].[Players] ([Id]),
     CONSTRAINT [FK_TeamPlayerXref_Teams] FOREIGN KEY ([TeamId]) REFERENCES [dbo].[Teams] ([Id])

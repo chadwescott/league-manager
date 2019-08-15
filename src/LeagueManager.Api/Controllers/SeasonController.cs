@@ -16,27 +16,12 @@ namespace LeagueManager.Api.Controllers
 {
     [ApiController]
     [Route(Routes.Seasons)]
-    public class SeasonController : BaseController
+    public class SeasonController : ControllerBase
     {
-        private readonly IGetModels<Season> _getAllSeasons;
-        private readonly IGetModelById<Season> _getSeasonById;
-        private readonly ISaveModel<Season> _saveSeason;
-
-        public SeasonController(
-            IMapper mapper,
-            IGetModels<Season> getAllSeasons,
-            IGetModelById<Season> getSeasonById,
-            ISaveModel<Season> saveSeason)
-            : base(mapper)
-        {
-            _getAllSeasons = getAllSeasons;
-            _getSeasonById = getSeasonById;
-            _saveSeason = saveSeason;
-        }
-
         /// <summary>
         /// Returns all seasons.
         /// </summary>
+        /// <param name="getSeasons"></param>
         /// <returns></returns>
         [HttpGet]
         [SwaggerOperation(OperationId = "getSeasons", Tags = new[] { Categories.Seasons })]
@@ -44,9 +29,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<SeasonResponse[]> GetAllSeasons()
+        public ActionResult<SeasonResponse[]> GetAllSeasons([FromServices] IGetModels<Season> getSeasons)
         {
-            var seasons = _getAllSeasons.Execute();
+            var seasons = getSeasons.Execute();
             var response = seasons.Select(x => Mapper.Map<SeasonResponse>(x)).ToArray();
             return new OkObjectResult(response);
         }
@@ -54,6 +39,7 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Returns the season with the season id provided.
         /// </summary>
+        /// <param name="getSeasonById"></param>
         /// <param name="seasonId"></param>
         /// <returns></returns>
         [HttpGet]
@@ -63,9 +49,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<SeasonResponse> GetSeasonById([FromRoute] Guid seasonId)
+        public ActionResult<SeasonResponse> GetSeasonById([FromServices] IGetModelById<Season> getSeasonById, [FromRoute] Guid seasonId)
         {
-            var season = _getSeasonById.Execute(seasonId);
+            var season = getSeasonById.Execute(seasonId);
             if (season == null)
                 return new NotFoundResult();
 
@@ -75,6 +61,7 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Creates a new season.
         /// </summary>
+        /// <param name="saveSeason"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
@@ -83,9 +70,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<SeasonResponse> CreateSeason(SeasonRequest request)
+        public ActionResult<SeasonResponse> CreateSeason([FromServices] ISaveModel<Season> saveSeason, SeasonRequest request)
         {
-            var season = _saveSeason.Execute(Mapper.Map<Season>(request));
+            var season = saveSeason.Execute(Mapper.Map<Season>(request));
             var response = Mapper.Map<SeasonResponse>(season);
             return new OkObjectResult(response);
         }
@@ -93,6 +80,7 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Updates the season with the season id provided.
         /// </summary>
+        /// <param name="saveSeason"></param>
         /// <param name="seasonId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -103,12 +91,12 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<SeasonResponse> UpdateSeason([FromRoute] Guid seasonId, SeasonRequest request)
+        public ActionResult<SeasonResponse> UpdateSeason([FromServices] ISaveModel<Season> saveSeason, [FromRoute] Guid seasonId, SeasonRequest request)
         {
             var season = Mapper.Map<Season>(request);
             season.Id = seasonId;
 
-            season = _saveSeason.Execute(season);
+            season = saveSeason.Execute(season);
             var response = Mapper.Map<SeasonResponse>(season);
             return new OkObjectResult(response);
         }

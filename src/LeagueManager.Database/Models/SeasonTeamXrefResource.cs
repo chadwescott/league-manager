@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LeagueManager.Database.Models
 {
-    [Table("Events")]
-    public class EventResource : IHasId
+    [Table("TeamPlayerXref")]
+    public class SeasonTeamXrefResource : IHasId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("Id")]
         public Guid Id { get; set; }
 
+        [ForeignKey("SeasonId")]
+        public SeasonResource Season { get; set; }
+
         [Column("SeasonId")]
         public Guid SeasonId { get; set; }
 
-        [Column("Name")]
-        [MaxLength(200)]
-        public string Name { get; set; }
+        [ForeignKey("TeamId")]
+        public TeamResource Team { get; set; }
 
-        [Column("StartTime")]
-        public DateTime StartTime { get; set; }
-
-        [ForeignKey("EventId")]
-        public IEnumerable<GameResource> Games { get; set; }
+        [Column("TeamId")]
+        public Guid TeamId { get; set; }
     }
 }

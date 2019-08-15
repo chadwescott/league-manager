@@ -16,30 +16,12 @@ namespace LeagueManager.Api.Controllers
 {
     [ApiController]
     [Route(Routes.Events)]
-    public class EventController : BaseController
+    public class EventController : ControllerBase
     {
-        private readonly IGetModels<Event> _getAllEvents;
-        private readonly IGetModelById<Event> _getEventById;
-        private readonly IGetTeamsByEvent _getTeamsByEvent;
-        private readonly ISaveModel<Event> _saveEvent;
-
-        public EventController(
-            IMapper mapper,
-            IGetModels<Event> getAllEvents,
-            IGetModelById<Event> getEventById,
-            IGetTeamsByEvent getTeamsByEvent,
-            ISaveModel<Event> saveEvent)
-            : base(mapper)
-        {
-            _getAllEvents = getAllEvents;
-            _getEventById = getEventById;
-            _getTeamsByEvent = getTeamsByEvent;
-            _saveEvent = saveEvent;
-        }
-
         /// <summary>
         /// Returns all the events.
         /// </summary>
+        /// <param name="getEvents"></param>
         /// <returns></returns>
         [HttpGet]
         [SwaggerOperation(OperationId = "getEvents", Tags = new[] { Categories.Events })]
@@ -47,9 +29,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<EventResponse[]> GetAllEvents()
+        public ActionResult<EventResponse[]> GetAllEvents([FromServices] IGetModels<Event> getEvents)
         {
-            var events = _getAllEvents.Execute();
+            var events = getEvents.Execute();
             var response = events.Select(x => Mapper.Map<EventResponse>(x)).ToArray();
             return new OkObjectResult(response);
         }
@@ -57,6 +39,7 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Returns the event with the event id provided.
         /// </summary>
+        /// <param name="getEventById"></param>
         /// <param name="eventId"></param>
         /// <returns></returns>
         [HttpGet]
@@ -66,9 +49,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<EventResponse> GetEventById([FromRoute] Guid eventId)
+        public ActionResult<EventResponse> GetEventById([FromServices] IGetModelById<Event> getEventById, [FromRoute] Guid eventId)
         {
-            var model = _getEventById.Execute(eventId);
+            var model = getEventById.Execute(eventId);
             if (model == null)
                 return new NotFoundResult();
 
@@ -78,6 +61,7 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Returns the teams participating in the event with the event id provided.
         /// </summary>
+        /// <param name="getTeamsByEvent"></param>
         /// <param name="eventId"></param>
         /// <returns></returns>
         [HttpGet]
@@ -87,9 +71,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<TeamResponse[]> GetTeamsByEventId([FromRoute] Guid eventId)
+        public ActionResult<TeamResponse[]> GetTeamsByEventId([FromServices] IGetTeamsByEvent getTeamsByEvent, [FromRoute] Guid eventId)
         {
-            var model = _getTeamsByEvent.Execute(eventId);
+            var model = getTeamsByEvent.Execute(eventId);
             if (model == null)
                 return new NotFoundResult();
 
@@ -99,6 +83,7 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Creates a new event.
         /// </summary>
+        /// <param name="saveEvent"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
@@ -107,9 +92,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<EventResponse> CreateEvent(EventRequest request)
+        public ActionResult<EventResponse> CreateEvent([FromServices] ISaveModel<Event> saveEvent, EventRequest request)
         {
-            var model = _saveEvent.Execute(Mapper.Map<Event>(request));
+            var model = saveEvent.Execute(Mapper.Map<Event>(request));
             var response = Mapper.Map<EventResponse>(model);
             return new OkObjectResult(response);
         }
@@ -117,6 +102,7 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Updates the event with the event id provided.
         /// </summary>
+        /// <param name="saveEvent"></param>
         /// <param name="eventId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -127,12 +113,12 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<EventResponse> UpdateEvent([FromRoute] Guid eventId, EventRequest request)
+        public ActionResult<EventResponse> UpdateEvent([FromServices] ISaveModel<Event> saveEvent, [FromRoute] Guid eventId, EventRequest request)
         {
             var model = Mapper.Map<Event>(request);
             model.Id = eventId;
 
-            model = _saveEvent.Execute(model);
+            model = saveEvent.Execute(model);
             var response = Mapper.Map<EventResponse>(model);
             return new OkObjectResult(response);
         }

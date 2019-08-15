@@ -16,27 +16,12 @@ namespace LeagueManager.Api.Controllers
 {
     [ApiController]
     [Route(Routes.Leagues)]
-    public class LeagueController : BaseController
+    public class LeagueController : ControllerBase
     {
-        private readonly IGetModels<League> _getAllLeagues;
-        private readonly IGetModelById<League> _getLeagueById;
-        private readonly ISaveModel<League> _saveLeague;
-
-        public LeagueController(
-            IMapper mapper,
-            IGetModels<League> getAllLeagues,
-            IGetModelById<League> getLeagueById,
-            ISaveModel<League> saveLeague)
-            : base(mapper)
-        {
-            _getAllLeagues = getAllLeagues;
-            _getLeagueById = getLeagueById;
-            _saveLeague = saveLeague;
-        }
-
         /// <summary>
         /// Returns all the leagues.
         /// </summary>
+        /// <param name="getLeagues"></param>
         /// <returns></returns>
         [HttpGet]
         [SwaggerOperation(OperationId = "getLeagues", Tags = new[] { Categories.Leagues })]
@@ -44,9 +29,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<LeagueResponse[]> GetAllLeagues()
+        public ActionResult<LeagueResponse[]> GetAllLeagues([FromServices] IGetModels<League> getLeagues)
         {
-            var Leagues = _getAllLeagues.Execute();
+            var Leagues = getLeagues.Execute();
             var response = Leagues.Select(x => Mapper.Map<LeagueResponse>(x)).ToArray();
             return new OkObjectResult(response);
         }
@@ -54,6 +39,7 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Returns the league with the league id provided.
         /// </summary>
+        /// <param name="getLeagueById"></param>
         /// <param name="leagueId"></param>
         /// <returns></returns>
         [HttpGet]
@@ -63,18 +49,20 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<LeagueResponse> GetLeagueById([FromRoute] Guid leagueId)
+        public ActionResult<LeagueResponse> GetLeagueById([FromServices] IGetModelById<League> getLeagueById, [FromRoute] Guid leagueId)
         {
-            var league = _getLeagueById.Execute(leagueId);
+            var league = getLeagueById.Execute(leagueId);
             if (league == null)
                 return new NotFoundResult();
 
             return new OkObjectResult(Mapper.Map<LeagueResponse>(league));
         }
+        
 
         /// <summary>
         /// Creates a new league.
         /// </summary>
+        /// <param name="saveLeague"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
@@ -83,9 +71,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<LeagueResponse> CreateLeague(LeagueRequest request)
+        public ActionResult<LeagueResponse> CreateLeague([FromServices] ISaveModel<League> saveLeague, LeagueRequest request)
         {
-            var league = _saveLeague.Execute(Mapper.Map<League>(request));
+            var league = saveLeague.Execute(Mapper.Map<League>(request));
             var response = Mapper.Map<LeagueResponse>(league);
             return new OkObjectResult(response);
         }
@@ -93,7 +81,8 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Updates the league with the league id provided.
         /// </summary>
-        /// <param name="LeagueId"></param>
+        /// <param name="saveLeague"></param>
+        /// <param name="leagueId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut]
@@ -103,12 +92,14 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<LeagueResponse> UpdateLeague([FromRoute] Guid LeagueId, LeagueRequest request)
+        public ActionResult<LeagueResponse> UpdateLeague([FromServices] ISaveModel<League> saveLeague,
+			[FromRoute] Guid leagueId,
+			LeagueRequest request)
         {
             var league = Mapper.Map<League>(request);
-            league.Id = LeagueId;
+            league.Id = leagueId;
 
-            league = _saveLeague.Execute(league);
+            league = saveLeague.Execute(league);
             var response = Mapper.Map<LeagueResponse>(league);
             return new OkObjectResult(response);
         }

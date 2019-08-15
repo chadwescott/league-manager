@@ -5,25 +5,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LeagueManager.Database.Models
 {
-    [Table("Events")]
-    public class EventResource : IHasId
+    [Table("Games")]
+    public class GameResource : IHasId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("Id")]
         public Guid Id { get; set; }
 
-        [Column("SeasonId")]
-        public Guid SeasonId { get; set; }
-
-        [Column("Name")]
-        [MaxLength(200)]
-        public string Name { get; set; }
+        [Column("Number")]
+        public int Number { get; set; }
 
         [Column("StartTime")]
-        public DateTime StartTime { get; set; }
+        public DateTime? StartTime { get; set; }
 
         [ForeignKey("EventId")]
-        public IEnumerable<GameResource> Games { get; set; }
+        public EventResource Event { get; set; }
+
+        public List<GameTeamXrefResource> GameTeams { get; set; }
     }
 }

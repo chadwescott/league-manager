@@ -16,24 +16,8 @@ namespace LeagueManager.Api.Controllers
 {
     [ApiController]
     [Route(Routes.Players)]
-    public class PlayerController : BaseController
+    public class PlayerController : ControllerBase
     {
-        private readonly IGetModels<Player> _getAllPlayers;
-        private readonly IGetModelById<Player> _getPlayerById;
-        private readonly ISaveModel<Player> _savePlayer;
-
-        public PlayerController(
-            IMapper mapper,
-            IGetModels<Player> getAllPlayers,
-            IGetModelById<Player> getPlayerById,
-            ISaveModel<Player> savePlayer)
-            : base(mapper)
-        {
-            _getAllPlayers = getAllPlayers;
-            _getPlayerById = getPlayerById;
-            _savePlayer = savePlayer;
-        }
-
         /// <summary>
         /// Returns all the players.
         /// </summary>
@@ -44,9 +28,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<PlayerResponse[]> GetAllPlayers()
+        public ActionResult<PlayerResponse[]> GetAllPlayers([FromServices] IGetModels<Player> getPlayers)
         {
-            var players = _getAllPlayers.Execute();
+            var players = getPlayers.Execute();
             var response = players.Select(x => Mapper.Map<PlayerResponse>(x)).ToArray();
             return new OkObjectResult(response);
         }
@@ -54,6 +38,7 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Returns the player with the player id provided.
         /// </summary>
+        /// <param name="getPlayerById"></param>
         /// <param name="playerId"></param>
         /// <returns></returns>
         [HttpGet]
@@ -63,9 +48,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<PlayerResponse> GetPlayerById([FromRoute] Guid playerId)
+        public ActionResult<PlayerResponse> GetPlayerById([FromServices] IGetModelById<Player> getPlayerById, [FromRoute] Guid playerId)
         {
-            var player = _getPlayerById.Execute(playerId);
+            var player = getPlayerById.Execute(playerId);
             if (player == null)
                 return new NotFoundResult();
 
@@ -73,8 +58,31 @@ namespace LeagueManager.Api.Controllers
         }
 
         /// <summary>
+        /// Returns the leagues  the player belongs to.
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(Routes.Players + "/{playerId}/" + Routes.Leagues)]
+        [SwaggerOperation(OperationId = "getPlayerById", Tags = new[] { Categories.Players })]
+        [SwaggerResponse(200, Type = typeof(LeagueResponse[]))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
+        public ActionResult<PlayerResponse> GetPlayerLeauges([FromServices] IGetLeaguesByPlayer getLeaguesByPlayer, [FromRoute] Guid playerId)
+        {
+            var leagues = getLeaguesByPlayer.Execute(playerId);
+            if (leagues == null)
+                return new NotFoundResult();
+
+            var response = leagues.Select(l => Mapper.Map<LeagueResponse>(l)).ToArray();
+            return new OkObjectResult(response);
+        }
+
+        /// <summary>
         /// Creates a new player.
         /// </summary>
+        /// <param name="savePlayer"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
@@ -83,9 +91,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<PlayerResponse> CreatePlayer(PlayerRequest request)
+        public ActionResult<PlayerResponse> CreatePlayer([FromServices]ISaveModel<Player> savePlayer, PlayerRequest request)
         {
-            var player = _savePlayer.Execute(Mapper.Map<Player>(request));
+            var player = savePlayer.Execute(Mapper.Map<Player>(request));
             var response = Mapper.Map<PlayerResponse>(player);
             return new OkObjectResult(response);
         }
@@ -93,6 +101,7 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Updates the player with the player id provided.
         /// </summary>
+        /// <param name="savePlayer"></param>
         /// <param name="playerId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -103,12 +112,12 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<PlayerResponse> UpdatePlayer([FromRoute] Guid playerId, PlayerRequest request)
+        public ActionResult<PlayerResponse> UpdatePlayer([FromServices]ISaveModel<Player> savePlayer, [FromRoute] Guid playerId, PlayerRequest request)
         {
             var player = Mapper.Map<Player>(request);
             player.Id = playerId;
 
-            player = _savePlayer.Execute(player);
+            player = savePlayer.Execute(player);
             var response = Mapper.Map<PlayerResponse>(player);
             return new OkObjectResult(response);
         }

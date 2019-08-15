@@ -16,36 +16,12 @@ namespace LeagueManager.Api.Controllers
 {
     [ApiController]
     [Route(Routes.Teams)]
-    public class TeamController : BaseController
+    public class TeamController : ControllerBase
     {
-        private readonly IGetModels<Team> _getAllTeams;
-        private readonly IGetModelById<Team> _getTeamById;
-        private readonly IGetPlayersByTeam _getPlayersByTeam;
-        private readonly ISaveModel<Team> _saveTeam;
-        private readonly ISaveModel<TeamPlayer> _saveTeamPlayer;
-        private readonly IDeleteModel<TeamPlayer> _deleteTeamPlayer;
-
-        public TeamController(
-            IMapper mapper,
-            IGetModels<Team> getAllTeams,
-            IGetModelById<Team> getTeamById,
-            IGetPlayersByTeam getPlayersByTeam,
-            ISaveModel<Team> saveTeam,
-            ISaveModel<TeamPlayer> saveTeamPlayer,
-            IDeleteModel<TeamPlayer> deleteTeamPlayer)
-            : base(mapper)
-        {
-            _getAllTeams = getAllTeams;
-            _getTeamById = getTeamById;
-            _getPlayersByTeam = getPlayersByTeam;
-            _saveTeam = saveTeam;
-            _saveTeamPlayer = saveTeamPlayer;
-            _deleteTeamPlayer = deleteTeamPlayer;
-        }
-
         /// <summary>
         /// Returns all the teams.
         /// </summary>
+        /// <param name="getTeams"></param>
         /// <returns></returns>
         [HttpGet]
         [SwaggerOperation(OperationId = "getTeams", Tags = new[] { Categories.Teams })]
@@ -53,9 +29,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<TeamResponse[]> GetAllTeams()
+        public ActionResult<TeamResponse[]> GetAllTeams([FromServices] IGetModels<Team> getTeams)
         {
-            var teams = _getAllTeams.Execute();
+            var teams = getTeams.Execute();
             var response = teams.Select(x => Mapper.Map<TeamResponse>(x)).ToArray();
             return new OkObjectResult(response);
         }
@@ -63,6 +39,7 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Returns the team with the team id provided.
         /// </summary>
+        /// <param name="getTeamById"></param>
         /// <param name="teamId"></param>
         /// <returns></returns>
         [HttpGet]
@@ -72,9 +49,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<TeamResponse> GetTeamById([FromRoute] Guid teamId)
+        public ActionResult<TeamResponse> GetTeamById([FromServices] IGetModelById<Team> getTeamById, [FromRoute] Guid teamId)
         {
-            var team = _getTeamById.Execute(teamId);
+            var team = getTeamById.Execute(teamId);
             if (team == null)
                 return new NotFoundResult();
 
@@ -84,6 +61,7 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Returns the players on the team with the team id provided.
         /// </summary>
+        /// <param name="getPlayersByTeam"></param>
         /// <param name="teamId"></param>
         /// <returns></returns>
         [HttpGet]
@@ -93,9 +71,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<PlayerResponse[]> GetTeamPlayers([FromRoute] Guid teamId)
+        public ActionResult<PlayerResponse[]> GetTeamPlayers([FromServices] IGetPlayersByTeam getPlayersByTeam, [FromRoute] Guid teamId)
         {
-            var players = _getPlayersByTeam.Execute(teamId);
+            var players = getPlayersByTeam.Execute(teamId);
             var response = players.Select(x => Mapper.Map<PlayerResponse>(x)).ToArray();
             return new OkObjectResult(response);
         }
@@ -103,6 +81,8 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Adds the player with the player id provided to the team with the team id provided.
         /// </summary>
+        /// <param name="saveTeamPlayer"></param>
+        /// <param name="getPlayersByTeam"></param>
         /// <param name="teamId"></param>
         /// <param name="playerId"></param>
         /// <returns></returns>
@@ -113,16 +93,20 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<PlayerResponse[]> AddTeamPlayer([FromRoute] Guid teamId, [FromRoute] Guid playerId)
+        public ActionResult<PlayerResponse[]> AddTeamPlayer([FromServices] ISaveModel<TeamPlayer> saveTeamPlayer,
+            [FromServices] IGetPlayersByTeam getPlayersByTeam,
+            [FromRoute] Guid teamId,
+            [FromRoute] Guid playerId)
         {
             var teamPlayer = new TeamPlayer { TeamId = teamId, PlayerId = playerId };
-            _saveTeamPlayer.Execute(teamPlayer);
-            return GetTeamPlayers(teamId);
+            saveTeamPlayer.Execute(teamPlayer);
+            return GetTeamPlayers(getPlayersByTeam, teamId);
         }
 
         /// <summary>
         /// Creates a new team.
         /// </summary>
+        /// <param name="saveTeam"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
@@ -131,9 +115,9 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<TeamResponse> CreateTeam(TeamRequest request)
+        public ActionResult<TeamResponse> CreateTeam([FromServices] ISaveModel<Team> saveTeam, TeamRequest request)
         {
-            var team = _saveTeam.Execute(Mapper.Map<Team>(request));
+            var team = saveTeam.Execute(Mapper.Map<Team>(request));
             var response = Mapper.Map<TeamResponse>(team);
             return new OkObjectResult(response);
         }
@@ -141,7 +125,8 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Updates the team with the team id provided.
         /// </summary>
-        /// <param name="TeamId"></param>
+        /// <param name="saveTeam"></param>
+        /// <param name="teamId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut]
@@ -151,12 +136,14 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<TeamResponse> UpdateTeam([FromRoute] Guid TeamId, TeamRequest request)
+        public ActionResult<TeamResponse> UpdateTeam([FromServices] ISaveModel<Team> saveTeam,
+            [FromRoute] Guid teamId,
+            TeamRequest request)
         {
             var team = Mapper.Map<Team>(request);
-            team.EventId = TeamId;
+            team.Id = teamId;
 
-            team = _saveTeam.Execute(team);
+            team = saveTeam.Execute(team);
             var response = Mapper.Map<TeamResponse>(team);
             return new OkObjectResult(response);
         }
@@ -164,6 +151,8 @@ namespace LeagueManager.Api.Controllers
         /// <summary>
         /// Removes the player with the player id provided from the team with the team id provided.
         /// </summary>
+        /// <param name="deleteTeamPlayer"></param>
+        /// <param name="getPlayersByTeam"></param>
         /// <param name="teamId"></param>
         /// <param name="playerId"></param>
         /// <returns></returns>
@@ -174,11 +163,14 @@ namespace LeagueManager.Api.Controllers
         [SwaggerResponse(400)]
         [SwaggerResponse(404)]
         [SwaggerResponse(500)]
-        public ActionResult<PlayerResponse[]> DeleteTeamPlayer([FromRoute] Guid teamId, [FromRoute] Guid playerId)
+        public ActionResult<PlayerResponse[]> DeleteTeamPlayer([FromServices] IDeleteModel<TeamPlayer> deleteTeamPlayer,
+            [FromServices] IGetPlayersByTeam getPlayersByTeam,
+			[FromRoute] Guid teamId,
+			[FromRoute] Guid playerId)
         {
             var teamPlayer = new TeamPlayer { TeamId = teamId, PlayerId = playerId };
-            _deleteTeamPlayer.Execute(teamPlayer);
-            return GetTeamPlayers(teamId);
+            deleteTeamPlayer.Execute(teamPlayer);
+            return GetTeamPlayers(getPlayersByTeam, teamId);
         }
     }
 }

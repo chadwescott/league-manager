@@ -19,6 +19,13 @@ namespace LeagueManager.Api.Mappers.Responses
                     MediaType = MediaTypes.Json,
                     Method = Methods.GET,
                     Rel = LinkTypes.LEAGUES 
+                },
+                new LinkResponse
+                {
+                    Href = $"/{Routes.Players}/{model.Id}",
+                    MediaType = MediaTypes.Json,
+                    Method = Methods.PUT,
+                    Rel = LinkTypes.UPDATE 
                 }
             };
         }

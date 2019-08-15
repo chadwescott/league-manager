@@ -70,8 +70,13 @@
     <Build Include="dbo\Tables\Leagues.sql" />
     <Build Include="dbo\Tables\Seasons.sql" />
     <Build Include="dbo\Tables\Games.sql" />
-    <Build Include="dbo\Tables\GameTeamsXref.sql" />
+    <Build Include="dbo\Tables\GameTeamXref.sql" />
     <Build Include="dbo\Tables\TeamPlayerXref.sql" />
+    <Build Include="dbo\Tables\SeasonTeamXref.sql" />
+    <Build Include="dbo\Tables\GamePlayerXref.sql" />
+    <Build Include="dbo\Tables\SeasonPlayerXref.sql" />
+    <Build Include="dbo\Tables\LeaguePlayerXref.sql" />
+    <Build Include="dbo\Tables\LeagueTeamXref.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SqlSchemaCompare.scmp" />

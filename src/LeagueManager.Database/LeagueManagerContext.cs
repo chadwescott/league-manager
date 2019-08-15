@@ -26,14 +26,20 @@ namespace LeagueManager.Database
 
         public DbSet<EventResource> Events { get; set;  }
 
+        public DbSet<GameResource> Games { get; set; }
+
+        public DbSet<GameTeamXrefResource> GameTeams { get; set; }
+
         public DbSet<LeagueResource> Leagues { get; set; }
 
         public DbSet<PlayerResource> Players { get; set; }
 
         public DbSet<SeasonResource> Seasons { get; set; }
 
-        public DbSet<TeamResource> Teams { get; set; }
+        public DbSet<SeasonTeamXrefResource> SeasonTeams { get; set; }
 
         public DbSet<TeamPlayerXrefResource> TeamPlayers { get; set; }
+
+        public DbSet<TeamResource> Teams { get; set; }
     }
 }
