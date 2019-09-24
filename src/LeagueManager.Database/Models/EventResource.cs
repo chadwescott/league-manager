@@ -23,7 +23,6 @@ namespace LeagueManager.Database.Models
         [Column("StartTime")]
         public DateTime StartTime { get; set; }
 
-        [ForeignKey("EventId")]
         public IEnumerable<GameResource> Games { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LeagueManager.Database.Models
 {
-    [Table("TeamPlayerXref")]
+    [Table("SeasonTeamXref")]
     public class SeasonTeamXrefResource : IHasId
     {
         [Key]

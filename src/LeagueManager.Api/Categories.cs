@@ -3,6 +3,7 @@
     public static class Categories
     {
         public const string Events = "Events";
+        public const string Games = "Games";
         public const string Leagues = "Leagues";
         public const string Players = "Players";
         public const string Seasons = "Seasons";

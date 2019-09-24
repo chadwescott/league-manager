@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 using AutoMapper;
 
@@ -24,11 +23,12 @@ namespace LeagueManager.Business.Commands.Impl
 
         public Team[] Execute(Guid eventId)
         {
-            return _sqlCommand.Execute(
-                x => x.Where(y => y.EventId == eventId))
-               .OrderBy(y => y.TeamNumber)
-               .Select(x => _mapper.Map<Team>(x))
-               .ToArray();
+            //return _sqlCommand.Execute(
+            //    x => x.Where(y => y.EventId == eventId))
+            //   .OrderBy(y => y.TeamNumber)
+            //   .Select(x => _mapper.Map<Team>(x))
+            //   .ToArray();
+            throw new NotImplementedException();
         }
     }
 }

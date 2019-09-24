@@ -13,7 +13,7 @@ namespace LeagueManager.Domain.Responses
         [JsonProperty("method")]
         public string Method { get; set; }
 
-        [JsonProperty("media-type")]
+        [JsonProperty("mediaType")]
         public string MediaType { get; set; }
     }
 }

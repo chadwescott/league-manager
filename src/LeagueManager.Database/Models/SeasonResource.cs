@@ -26,7 +26,6 @@ namespace LeagueManager.Database.Models
         [Column("SortOrder")]
         public int SortOrder { get; set; }
 
-        [ForeignKey("SeasonId")]
         public IEnumerable<SeasonTeamXrefResource> SeasonTeams { get; set; }
     }
 }

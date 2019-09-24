@@ -4,11 +4,13 @@ using System.Reflection;
 
 using AutoMapper;
 using AutoMapper.Configuration;
+
 using LeagueManager.Api.Mappers.Responses;
 using LeagueManager.Business;
 using LeagueManager.Business.Models;
 using LeagueManager.Domain.Requests;
 using LeagueManager.Domain.Responses;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +45,7 @@ namespace LeagueManager.Api
             mapperConfig.CreateMap<TeamRequest, Team>();
 
             mapperConfig.CreateMap<Event, EventResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
+            mapperConfig.CreateMap<Game, GameResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
             mapperConfig.CreateMap<Player, PlayerResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
             mapperConfig.CreateMap<Season, SeasonResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
             mapperConfig.CreateMap<Team, TeamResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));

@@ -15,7 +15,6 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace LeagueManager.Api.Controllers
 {
     [ApiController]
-    [Route(Routes.Events)]
     public class EventController : ControllerBase
     {
         /// <summary>
@@ -24,6 +23,7 @@ namespace LeagueManager.Api.Controllers
         /// <param name="getEvents"></param>
         /// <returns></returns>
         [HttpGet]
+        [Route(Routes.Events)]
         [SwaggerOperation(OperationId = "getEvents", Tags = new[] { Categories.Events })]
         [SwaggerResponse(200, Type = typeof(EventResponse[]))]
         [SwaggerResponse(400)]
@@ -87,6 +87,7 @@ namespace LeagueManager.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
+        [Route(Routes.Events)]
         [SwaggerOperation(OperationId = "createEvent", Tags = new[] { Categories.Events })]
         [SwaggerResponse(200, Type = typeof(EventResponse))]
         [SwaggerResponse(400)]

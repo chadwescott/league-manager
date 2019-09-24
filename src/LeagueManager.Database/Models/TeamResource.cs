@@ -13,21 +13,9 @@ namespace LeagueManager.Database.Models
         [Column("Id")]
         public Guid Id { get; set; }
 
-        [Column("EventId")]
-        public Guid EventId { get; set; }
-
         [Column("Name")]
         [MaxLength(50)]
         public string Name { get; set; }
-
-        [Column("TeamNumber")]
-        public int TeamNumber { get; set; }
-
-        [Column("Wins")]
-        public int Wins { get; set; }
-
-        [Column("Losses")]
-        public int Losses { get; set; }
 
         public List<TeamPlayerXrefResource> TeamPlayers { get; set; }
     }

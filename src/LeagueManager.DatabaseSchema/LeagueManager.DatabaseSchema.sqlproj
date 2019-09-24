@@ -65,8 +65,6 @@
     <Build Include="dbo\Tables\Teams.sql" />
     <Build Include="dbo\Tables\Events.sql" />
     <Build Include="dbo\Tables\Players.sql" />
-    <Build Include="dbo\Views\Leaderboard_V.sql" />
-    <Build Include="dbo\Views\Results_V.sql" />
     <Build Include="dbo\Tables\Leagues.sql" />
     <Build Include="dbo\Tables\Seasons.sql" />
     <Build Include="dbo\Tables\Games.sql" />
