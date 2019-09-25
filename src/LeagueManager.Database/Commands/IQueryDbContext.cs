@@ -2,7 +2,7 @@
 
 namespace LeagueManager.Database.Commands
 {
-    public interface IQueryDbContext<T> where T: IDbContext
+    public interface IQueryDbContext
     {
         void Execute(Action<ILeagueManagerContext> action = null);
     }

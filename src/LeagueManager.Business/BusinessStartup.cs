@@ -44,6 +44,8 @@ namespace LeagueManager.Business
             services.AddTransient<IGetModelById<Team>, GetModelById<Team, TeamResource>>();
             services.AddTransient<IGetTeamPlayerByTeamIdAndPlayerId, GetTeamPlayerByTeamIdAndPlayerId>();
             services.AddTransient<IGetTeamsByEvent, GetTeamsByEvent>();
+            services.AddTransient<IGetTeamsByGameId, GetTeamsByGameId>();
+            services.AddTransient<IGetTeamStatisticsByGameId, GetTeamStatisticsByGameId>();
 
             // Save command registration
             services.AddTransient<ISaveModel<Event>, SaveModel<Event, EventResource>>();

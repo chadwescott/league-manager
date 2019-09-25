@@ -16,6 +16,7 @@ namespace LeagueManager.Database
             services.AddSingleton(settings);
 
             services.AddSingleton<IContextFactory>(x => new ContextFactory(settings.ConnectionString));
+            services.AddSingleton<IQueryDbContext, QueryDbContext>();
 
             services.AddSingleton<IGetSqlCommand<EventResource>, GetSqlCommand<EventResource>>();
             services.AddSingleton<ISaveSqlCommand<EventResource>, SaveSqlCommand<EventResource>>();

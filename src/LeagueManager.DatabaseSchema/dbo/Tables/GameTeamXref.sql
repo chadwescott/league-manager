@@ -2,7 +2,6 @@
     [Id]       UNIQUEIDENTIFIER CONSTRAINT [DF_GameTeamXref_Id] DEFAULT (newsequentialid()) NOT NULL,
     [GameId]   UNIQUEIDENTIFIER NOT NULL,
     [TeamId]   UNIQUEIDENTIFIER NOT NULL,
-    [Score]    INT              NULL,
     [Outcome]  CHAR (1)         NULL,
     CONSTRAINT [PK_GameTeamXref] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_GameTeamXref_Games] FOREIGN KEY ([GameId]) REFERENCES [dbo].[Games] ([Id]),

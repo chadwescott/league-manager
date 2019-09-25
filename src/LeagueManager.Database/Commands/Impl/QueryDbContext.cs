@@ -2,10 +2,9 @@
 
 namespace LeagueManager.Database.Commands.Impl
 {
-    internal class GetWithDbContext<T> : SqlCommand, IQueryDbContext<T>
-        where T: IDbContext
+    internal class QueryDbContext : SqlCommand, IQueryDbContext
     {
-        public GetWithDbContext(IContextFactory contextFactory)
+        public QueryDbContext(IContextFactory contextFactory)
             : base(contextFactory)
         { }
 

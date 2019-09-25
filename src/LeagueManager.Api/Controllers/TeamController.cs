@@ -173,5 +173,28 @@ namespace LeagueManager.Api.Controllers
             deleteTeamPlayer.Execute(teamPlayer);
             return GetTeamPlayers(getPlayersByTeam, teamId);
         }
+
+        /// <summary>
+        /// Returns the teams playing in the game with the game id provided.
+        /// </summary>
+        /// <param name="getTeamsByGameId"></param>
+        /// <param name="gameId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(Routes.Games + "/{gameId}/" + Routes.Teams)]
+        [SwaggerOperation(OperationId = "getTeamsByGameId", Tags = new[] { Categories.Teams })]
+        [SwaggerResponse(200, Type = typeof(GameResponse))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(404)]
+        [SwaggerResponse(500)]
+        public ActionResult<TeamResponse[]> GetTeamsByGame([FromServices] IGetTeamsByGameId getTeamsByGameId, [FromRoute] Guid gameId)
+        {
+            var teams = getTeamsByGameId.Execute(gameId);
+            if (teams == null)
+                return new NotFoundResult();
+
+            var response = teams.Select(x => Mapper.Map<TeamResponse>(x)).ToArray();
+            return new OkObjectResult(response);
+        }
     }
 }

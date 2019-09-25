@@ -1,6 +1,4 @@
-﻿using System;
-
-using LeagueManager.Database.Models;
+﻿using LeagueManager.Database.Models;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +11,12 @@ namespace LeagueManager.Database
         DbSet<GameResource> Games { get; set; }
 
         DbSet<GameTeamXrefResource> GameTeams { get; set; }
+
+        DbSet<GameTeamDecimalStatisticsResource> GameTeamDecimalStatistics { get; set; }
+
+        DbSet<GameTeamIntegerStatisticsResource> GameTeamIntegerStatistics { get; set; }
+
+        DbSet<GameTeamTimeStatisticsResource> GameTeamTimeStatistics { get; set; }
 
         DbSet<LeagueResource> Leagues { get; set; }
 

@@ -12,6 +12,7 @@ namespace LeagueManager.Business.Configs
             mapperConfig.CreateMap<Event, EventResource>();
             mapperConfig.CreateMap<EventResource, Event>();
             mapperConfig.CreateMap<Game, GameResource>();
+            mapperConfig.CreateMap<GameTeamStatistics, GameTeamXrefResource>();
             mapperConfig.CreateMap<GameResource, Game>();
             mapperConfig.CreateMap<League, LeagueResource>();
             mapperConfig.CreateMap<LeagueResource, League>();

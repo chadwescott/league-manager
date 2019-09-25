@@ -1,4 +1,6 @@
-﻿using AutoMapper.Configuration;
+﻿using System;
+
+using AutoMapper.Configuration;
 
 using LeagueManager.Api.Mappers.Responses;
 using LeagueManager.Business.Models;
@@ -20,8 +22,12 @@ namespace LeagueManager.Api.Configs
 
             mapperConfig.CreateMap<Event, EventResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
             mapperConfig.CreateMap<Game, GameResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
+            mapperConfig.CreateMap<GameTeamStatistics, GameTeamStatisticsResponse>();
             mapperConfig.CreateMap<Player, PlayerResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
             mapperConfig.CreateMap<Season, SeasonResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
+            mapperConfig.CreateMap<Statistic<decimal>, StatisticResponse<decimal>>();
+            mapperConfig.CreateMap<Statistic<int>, StatisticResponse<int>>();
+            mapperConfig.CreateMap<Statistic<TimeSpan>, StatisticResponse<TimeSpan>>();
             mapperConfig.CreateMap<Team, TeamResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
         }
     }

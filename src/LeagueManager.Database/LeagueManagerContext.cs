@@ -30,6 +30,12 @@ namespace LeagueManager.Database
 
         public DbSet<GameTeamXrefResource> GameTeams { get; set; }
 
+        public DbSet<GameTeamDecimalStatisticsResource> GameTeamDecimalStatistics { get; set; }
+
+        public DbSet<GameTeamIntegerStatisticsResource> GameTeamIntegerStatistics { get; set; }
+
+        public DbSet<GameTeamTimeStatisticsResource> GameTeamTimeStatistics { get; set; }
+
         public DbSet<LeagueResource> Leagues { get; set; }
 
         public DbSet<PlayerResource> Players { get; set; }

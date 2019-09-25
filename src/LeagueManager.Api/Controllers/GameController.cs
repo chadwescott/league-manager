@@ -43,7 +43,7 @@ namespace LeagueManager.Api.Controllers
         /// <param name="gameId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route(Routes.Games + "/{GameId}")]
+        [Route(Routes.Games + "/{gameId}")]
         [SwaggerOperation(OperationId = "getGameById", Tags = new[] { Categories.Games })]
         [SwaggerResponse(200, Type = typeof(GameResponse))]
         [SwaggerResponse(400)]
@@ -57,7 +57,6 @@ namespace LeagueManager.Api.Controllers
 
             return new OkObjectResult(Mapper.Map<GameResponse>(game));
         }
-        
 
         /// <summary>
         /// Creates a new game.
@@ -87,7 +86,7 @@ namespace LeagueManager.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut]
-        [Route(Routes.Games + "/{GameId}")]
+        [Route(Routes.Games + "/{gameId}")]
         [SwaggerOperation(OperationId = "updateGame", Tags = new[] { Categories.Games })]
         [SwaggerResponse(200, Type = typeof(GameResponse))]
         [SwaggerResponse(400)]

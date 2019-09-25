@@ -5,7 +5,6 @@ using System.Linq;
 using AutoMapper;
 
 using LeagueManager.Business.Models;
-using LeagueManager.Database;
 using LeagueManager.Database.Commands;
 
 namespace LeagueManager.Business.Commands.Impl
@@ -13,11 +12,11 @@ namespace LeagueManager.Business.Commands.Impl
     internal class GetLeaguesByPlayer : IGetLeaguesByPlayer
     {
         private readonly IMapper _mapper;
-        private readonly IQueryDbContext<ILeagueManagerContext> _sqlCommand;
+        private readonly IQueryDbContext _sqlCommand;
 
         public GetLeaguesByPlayer(
             IMapper mapper,
-            IQueryDbContext<ILeagueManagerContext> sqlCommand)
+            IQueryDbContext sqlCommand)
         {
             _mapper = mapper;
             _sqlCommand = sqlCommand;

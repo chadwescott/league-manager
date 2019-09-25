@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+
 using AutoMapper;
 
 using LeagueManager.Business.Models;
@@ -23,8 +25,19 @@ namespace LeagueManager.Business.Commands.Impl
 
         protected override void OnBeforeSave(Game model, GameResource resource)
         {
-            base.OnBeforeSave(model,resource);
-            resource.GameTeams = model.TeamIds?.Select(x => new GameTeamXrefResource { TeamId = x }).ToList();
+            base.OnBeforeSave(model, resource);
+            resource.GameTeams = model.TeamIds?.Select(x => new GameTeamXrefResource
+            {
+                TeamId = x,
+                IntegerStatistics = new List<GameTeamIntegerStatisticsResource>
+                {
+                    new GameTeamIntegerStatisticsResource
+                    {
+                        Name = "Score",
+                        Value = 0
+                    }
+                }
+            }).ToList();
         }
     }
 }

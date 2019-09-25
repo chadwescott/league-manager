@@ -8,17 +8,23 @@ namespace LeagueManager.Api.Mappers.Responses
     {
         public static LinkResponse[] ToLinkResponse(this Game model)
         {
-            return new LinkResponse[] { };
-            //return new[]
-            //{
-            //    new LinkResponse
-            //    {
-            //        Href = $"/{Routes.Games}/{model.Id}",
-            //        MediaType = MediaTypes.Json,
-            //        Method = Methods.GET,
-            //        Rel = LinkTypes.GAMES
-            //    }
-            //};
+            return new[]
+            {
+                new LinkResponse
+                {
+                    Href = $"/{Routes.Games}/{model.Id}",
+                    MediaType = MediaTypes.Json,
+                    Method = Methods.GET,
+                    Rel = LinkTypes.GAMES
+                },
+                new LinkResponse
+                {
+                    Href = $"/{Routes.Games}/{model.Id}/{Routes.Teams}",
+                    MediaType = MediaTypes.Json,
+                    Method = Methods.GET,
+                    Rel = LinkTypes.TEAMS
+                }
+            };
         }
     }
 }

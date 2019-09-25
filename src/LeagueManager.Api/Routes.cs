@@ -7,6 +7,7 @@
         public const string Leagues = "leagues";
         public const string Players = "players";
         public const string Seasons = "seasons";
+        public const string Statistics = "statistics";
         public const string Teams = "teams";
     }
 }

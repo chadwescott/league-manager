@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,5 +24,11 @@ namespace LeagueManager.Database.Models
 
         [Column("TeamId")]
         public Guid TeamId { get; set; }
+
+        public List<GameTeamDecimalStatisticsResource> DecimalStatistics { get; set; }
+
+        public List<GameTeamIntegerStatisticsResource> IntegerStatistics { get; set; }
+
+        public List<GameTeamTimeStatisticsResource> TimeStatistics { get; set; }
     }
 }

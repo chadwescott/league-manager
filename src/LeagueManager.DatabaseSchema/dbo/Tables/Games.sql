@@ -7,10 +7,3 @@
     CONSTRAINT [PK__Games] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Games_ToEvents] FOREIGN KEY ([EventId]) REFERENCES [dbo].[Events] ([Id])
 );
-
-
-
-
-
-GO;
-
