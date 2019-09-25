@@ -23,12 +23,19 @@ namespace LeagueManager.Business.Commands.Impl
             _saveCommand = saveCommand;
         }
 
+        protected virtual void ValidateRequest(TM model) { }
+
+        protected virtual void OnBeforeSave(TM model, TR resource) { }
+
         public TM Execute(TM model)
         {
+            ValidateRequest(model);
             var resource = _mapper.Map<TR>(model);
 
             if (model.Id != Guid.Empty && _getCommand.Execute(x => x.Where(y => y.Id == model.Id)) == null)
                 throw new ArgumentException("Id provided is invalid", model.Id.ToString());
+
+            OnBeforeSave(model, resource);
 
             _saveCommand.Execute(resource);
             return _mapper.Map<TM>(resource);

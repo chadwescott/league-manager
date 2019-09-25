@@ -5,7 +5,9 @@ using System.Reflection;
 using AutoMapper;
 using AutoMapper.Configuration;
 
+using LeagueManager.Api.Configs;
 using LeagueManager.Api.Mappers.Responses;
+using LeagueManager.Api.Middleware;
 using LeagueManager.Business;
 using LeagueManager.Business.Models;
 using LeagueManager.Domain.Requests;
@@ -14,8 +16,9 @@ using LeagueManager.Domain.Responses;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
@@ -34,24 +37,39 @@ namespace LeagueManager.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var appSettings = new AppSettings();
+            Configuration.Bind("AppSettings", appSettings);
+            services.AddSingleton(appSettings);
+
+            var applicationDetails = new ApplicationDetails
+            {
+                ApplicationName = appSettings.Name,
+                Environment = appSettings.Environment,
+                Version = appSettings.Version
+            };
+
+            services.AddSingleton<ErrorHandlingSettings>();
+            services.AddSingleton<CorrelationIdSettings>();
+            services.AddSingleton(applicationDetails);
+
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(Configuration).CreateLogger();
+            services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
+
             // AutomMapper configuration
             var mapperConfig = new MapperConfigurationExpression();
+            mapperConfig.ConfigureAutoMapper();
             services.ConfigureBusinessServices(Configuration, mapperConfig);
-
-            mapperConfig.CreateMap<EventRequest, Event>();
-            mapperConfig.CreateMap<LeagueRequest, League>();
-            mapperConfig.CreateMap<PlayerRequest, Player>();
-            mapperConfig.CreateMap<SeasonRequest, Season>();
-            mapperConfig.CreateMap<TeamRequest, Team>();
-
-            mapperConfig.CreateMap<Event, EventResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
-            mapperConfig.CreateMap<Game, GameResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
-            mapperConfig.CreateMap<Player, PlayerResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
-            mapperConfig.CreateMap<Season, SeasonResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
-            mapperConfig.CreateMap<Team, TeamResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
 
             Mapper.Initialize(mapperConfig);
             services.AddSingleton(Mapper.Instance);
+
+            services.AddCors(x => x.AddPolicy("AllowAnyOrigin", y =>
+            {
+                y.AllowAnyOrigin();
+                y.AllowAnyMethod();
+                y.AllowAnyHeader();
+            }));
+            services.Configure<IISOptions>(x => x.AutomaticAuthentication = true);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSwaggerGen(x =>
@@ -78,6 +96,7 @@ namespace LeagueManager.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors("AllowAnyOrigin");
             app.UseSwagger();
             app.UseSwaggerUI(x =>
             {
@@ -85,15 +104,12 @@ namespace LeagueManager.Api
                 x.RoutePrefix = string.Empty;
             });
 
-            if (env.IsDevelopment())
-            {
-                app.UseErrorHandlingMiddleware();
-            }
-            else
-            {
+            if (!env.IsDevelopment())
                 app.UseHsts();
-                app.UseErrorHandlingMiddleware();
-            }
+
+            app.UseMiddleware<CorrelationIdMiddleware>();
+            app.UseMiddleware<LogRequestMiddleware>();
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseMvc();

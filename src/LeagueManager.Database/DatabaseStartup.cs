@@ -20,6 +20,9 @@ namespace LeagueManager.Database
             services.AddSingleton<IGetSqlCommand<EventResource>, GetSqlCommand<EventResource>>();
             services.AddSingleton<ISaveSqlCommand<EventResource>, SaveSqlCommand<EventResource>>();
 
+            services.AddSingleton<IGetSqlCommand<GameResource>, GetSqlCommand<GameResource>>();
+            services.AddSingleton<ISaveSqlCommand<GameResource>, SaveSqlCommand<GameResource>>();
+
             services.AddSingleton<IGetSqlCommand<LeagueResource>, GetSqlCommand<LeagueResource>>();
             services.AddSingleton<ISaveSqlCommand<LeagueResource>, SaveSqlCommand<LeagueResource>>();
 

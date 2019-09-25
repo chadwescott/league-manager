@@ -12,7 +12,5 @@
 
 
 
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Games_EventId_Number]
-    ON [dbo].[Games]([EventId] ASC, [Number] ASC);
+GO;
 
