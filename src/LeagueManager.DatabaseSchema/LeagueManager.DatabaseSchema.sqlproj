@@ -78,6 +78,11 @@
     <Build Include="dbo\Tables\GameTeamIntegerStatistics.sql" />
     <Build Include="dbo\Tables\GameTeamDecimalStatistics.sql" />
     <Build Include="dbo\Tables\GameTeamTimeStatistics.sql" />
+    <Build Include="dbo\Tables\GameTypes.sql" />
+    <Build Include="dbo\Tables\GameTypeStatistics.sql" />
+    <Build Include="dbo\Tables\ScoreSystems.sql" />
+    <Build Include="dbo\Tables\GameTypeRoundScoringSettings.sql" />
+    <Build Include="dbo\Tables\GameRounds.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SqlSchemaCompare.scmp" />

@@ -21,4 +21,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="GameTeamId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="bb552ba4-16e1-458d-a55c-372c1e447241" ChangeDateTime="09/27/2019 13:36:59">
+    <Property Name="ElementName" Value="[dbo].[ScoreSystems].[IX_ScoreSystems_Column]" />
+    <Property Name="ElementType" Value="SqlIndex" />
+    <Property Name="ParentElementName" Value="[dbo].[ScoreSystems]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IX_ScoreSystems_Name]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="39b47424-7981-4ffb-8151-2fbe783d1a15" ChangeDateTime="09/27/2019 13:48:04">
+    <Property Name="ElementName" Value="[dbo].[GameTypes].[ScoreSystem]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[GameTypes]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ScoreSystemId" />
+  </Operation>
 </Operations>
