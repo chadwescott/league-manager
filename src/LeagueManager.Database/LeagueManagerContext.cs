@@ -36,6 +36,8 @@ namespace LeagueManager.Database
 
         public DbSet<GameTeamTimeStatisticsResource> GameTeamTimeStatistics { get; set; }
 
+        public DbSet<GameTypeResource> GameTypes { get; set; }
+
         public DbSet<LeagueResource> Leagues { get; set; }
 
         public DbSet<PlayerResource> Players { get; set; }
@@ -43,6 +45,8 @@ namespace LeagueManager.Database
         public DbSet<SeasonResource> Seasons { get; set; }
 
         public DbSet<SeasonTeamXrefResource> SeasonTeams { get; set; }
+
+        public DbSet<ScoreSystemResource> ScoreSystems { get; set; }
 
         public DbSet<TeamPlayerXrefResource> TeamPlayers { get; set; }
 

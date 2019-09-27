@@ -33,6 +33,9 @@ namespace LeagueManager.Database
             services.AddSingleton<IGetSqlCommand<SeasonResource>, GetSqlCommand<SeasonResource>>();
             services.AddSingleton<ISaveSqlCommand<SeasonResource>, SaveSqlCommand<SeasonResource>>();
 
+            services.AddSingleton<IGetSqlCommand<ScoreSystemResource>, GetSqlCommand<ScoreSystemResource>>();
+            services.AddSingleton<ISaveSqlCommand<ScoreSystemResource>, SaveSqlCommand<ScoreSystemResource>>();
+
             services.AddSingleton<IGetSqlCommand<TeamPlayerXrefResource>, GetSqlCommand<TeamPlayerXrefResource>>();
             services.AddSingleton<ISaveSqlCommand<TeamPlayerXrefResource>, SaveSqlCommand<TeamPlayerXrefResource>>();
             services.AddSingleton<IDeleteSqlCommand<TeamPlayerXrefResource>, DeleteSqlCommand<TeamPlayerXrefResource>>();

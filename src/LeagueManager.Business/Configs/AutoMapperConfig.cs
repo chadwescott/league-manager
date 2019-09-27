@@ -18,6 +18,8 @@ namespace LeagueManager.Business.Configs
             mapperConfig.CreateMap<LeagueResource, League>();
             mapperConfig.CreateMap<Player, PlayerResource>();
             mapperConfig.CreateMap<PlayerResource, Player>();
+            mapperConfig.CreateMap<ScoreSystem, ScoreSystemResource>();
+            mapperConfig.CreateMap<ScoreSystemResource, ScoreSystem>();
             mapperConfig.CreateMap<Season, SeasonResource>();
             mapperConfig.CreateMap<SeasonResource, Season>();
             mapperConfig.CreateMap<Team, TeamResource>();

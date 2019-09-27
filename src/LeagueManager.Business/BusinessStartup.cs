@@ -38,6 +38,8 @@ namespace LeagueManager.Business
             services.AddTransient<IGetModels<Player>, GetPlayers>();
             services.AddTransient<IGetModelById<Player>, GetModelById<Player, PlayerResource>>();
             services.AddTransient<IGetPlayersByTeam, GetPlayersByTeam>();
+            services.AddTransient<IGetModels<ScoreSystem>, GetModels<ScoreSystem, ScoreSystemResource>>();
+            services.AddTransient<IGetModelById<ScoreSystem>, GetModelById<ScoreSystem, ScoreSystemResource>>();
             services.AddTransient<IGetModels<Season>, GetModels<Season, SeasonResource>>();
             services.AddTransient<IGetModelById<Season>, GetModelById<Season, SeasonResource>>();
             services.AddTransient<IGetModels<Team>, GetModels<Team, TeamResource>>();
@@ -52,6 +54,7 @@ namespace LeagueManager.Business
             services.AddTransient<ISaveModel<Game>, SaveGame>();
             services.AddTransient<ISaveModel<League>, SaveModel<League, LeagueResource>>();
             services.AddTransient<ISaveModel<Player>, SaveModel<Player, PlayerResource>>();
+            services.AddTransient<ISaveModel<ScoreSystem>, SaveModel<ScoreSystem, ScoreSystemResource>>();
             services.AddTransient<ISaveModel<Season>, SaveModel<Season, SeasonResource>>();
             services.AddTransient<ISaveModel<Team>, SaveModel<Team, TeamResource>>();
             services.AddTransient<ISaveModel<TeamPlayer>, SaveModel<TeamPlayer, TeamPlayerXrefResource>>();

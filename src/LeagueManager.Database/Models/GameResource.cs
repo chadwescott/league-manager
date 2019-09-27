@@ -13,11 +13,23 @@ namespace LeagueManager.Database.Models
         [Column("Id")]
         public Guid Id { get; set; }
 
+        [Column("GameTypeId")]
+        public Guid GameTypeId { get; set; }
+
+        [Column("EventId")]
+        public Guid EventId { get; set; }
+
         [Column("Number")]
         public int Number { get; set; }
 
         [Column("StartTime")]
         public DateTime? StartTime { get; set; }
+
+        [Column("Complete")]
+        public bool Complete { get; set; }
+
+        [ForeignKey("GameTypeId")]
+        public GameTypeResource GameType { get; set; }
 
         [ForeignKey("EventId")]
         public EventResource Event { get; set; }
