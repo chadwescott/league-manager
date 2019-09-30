@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Games] (
     [Id]        UNIQUEIDENTIFIER CONSTRAINT [DF_Games_Id] DEFAULT (newsequentialid()) NOT NULL,
-    [GameTypeId]   UNIQUEIDENTIFIER NULL,
+    [GameTypeId]   UNIQUEIDENTIFIER NOT NULL,
     [EventId]   UNIQUEIDENTIFIER NULL,
     [Number]    INT              NOT NULL,
     [StartTime] DATETIME         NULL,

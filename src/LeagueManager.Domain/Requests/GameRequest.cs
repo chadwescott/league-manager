@@ -6,8 +6,8 @@ namespace LeagueManager.Domain.Requests
 {
     public class GameRequest
     {
-        [JsonProperty("id")]
-        public Guid Id  { get; set; }
+        [JsonProperty("gameTypeId")]
+        public Guid GameTypeId  { get; set; }
 
         [JsonProperty("teamIds")]
         public Guid[] TeamIds  { get; set; }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LeagueManager.Database.Models
 {
     [Table("GameTypes")]
-    public class GameTypeResource
+    public class GameTypeResource : IHasId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -24,10 +24,10 @@ namespace LeagueManager.Database.Models
         [Column("MaximumTeams")]
         public int MaximumTeams { get; set; }
 
-        [Column("MinimumTeams")]
+        [Column("MinimumTeamSize")]
         public int MinimumTeamSize { get; set; }
 
-        [Column("MaximumTeams")]
+        [Column("MaximumTeamSize")]
         public int MaximumTeamSize { get; set; }
 
         [ForeignKey("ScoreSystemId")]

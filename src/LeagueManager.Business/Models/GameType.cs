@@ -1,8 +1,10 @@
 ﻿using System;
 
+using LeagueManager.Database.Models;
+
 namespace LeagueManager.Business.Models
 {
-    public class GameType
+    public class GameType : IHasId
     {
         public Guid Id { get; set; }
 

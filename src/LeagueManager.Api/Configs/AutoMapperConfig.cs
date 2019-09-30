@@ -16,6 +16,7 @@ namespace LeagueManager.Api.Configs
             // Requests
             mapperConfig.CreateMap<EventRequest, Event>();
             mapperConfig.CreateMap<GameRequest, Game>();
+            mapperConfig.CreateMap<GameTypeRequest, GameType>();
             mapperConfig.CreateMap<LeagueRequest, League>();
             mapperConfig.CreateMap<PlayerRequest, Player>();
             mapperConfig.CreateMap<ScoreSystemRequest, ScoreSystem>();
@@ -26,6 +27,7 @@ namespace LeagueManager.Api.Configs
             mapperConfig.CreateMap<Event, EventResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
             mapperConfig.CreateMap<Game, GameResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
             mapperConfig.CreateMap<GameTeamStatistics, GameTeamStatisticsResponse>();
+            mapperConfig.CreateMap<GameType, GameTypeResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
             mapperConfig.CreateMap<Player, PlayerResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));
             mapperConfig.CreateMap<ScoreSystem, ScoreSystemResponse>();
             mapperConfig.CreateMap<Season, SeasonResponse>().ForMember(x => x.Links, opt => opt.MapFrom(y => y.ToLinkResponse()));

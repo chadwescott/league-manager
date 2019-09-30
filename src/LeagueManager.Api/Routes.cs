@@ -4,6 +4,7 @@
     {
         public const string Events = "events";
         public const string Games = "games";
+        public const string GameTypes = "game-types";
         public const string Leagues = "leagues";
         public const string Players = "players";
         public const string Seasons = "seasons";
